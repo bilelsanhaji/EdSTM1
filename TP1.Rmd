@@ -4,7 +4,7 @@ author: "Fiche TD `R` #1"
 date: "Analyse de Séries Temporelles et Propriétés Stochastiques"
 #output: pdf_document
 ---
- 
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = TRUE,
@@ -28,7 +28,7 @@ library(astsa)
 ```
 
 ### Données
-
+ 
 Nice : https://drive.google.com/file/d/1QYI5dGRSb8jY2kxWyIOWhudSLalQt9Q5/view?usp=sharing
 
 Paris : https://drive.google.com/file/d/1Ptq3-aA2yFsw1nL3V0fPZ2-l81_J7VkX/view?usp=sharing
