@@ -37,14 +37,6 @@ Paris : <https://drive.google.com/file/d/1Ptq3-aA2yFsw1nL3V0fPZ2-l81_J7VkX/view?
 
 1.  Donnez une représentation graphique des données d'insolation de Nice et Paris. Incluez graphiquement les moyennes respectives à l'aide de la fonction `abline()`.
 
-```{r}
-
-```
-
-```{r}
-plot(rnorm(50))
-```
-
 <br>
 
 \bigskip\bigskip
