@@ -2,7 +2,7 @@
 title: "Économétrie des Séries Temporelles"
 author: "Fiche TD `R` #1"
 date: "Analyse de Séries Temporelles et Propriétés Stochastiques"
-#output: pdf_document
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -42,10 +42,12 @@ Tout d'abord, un chunk pour le chargement des données :
 
 ```{r importation_InsoNice_InsoParis, echo=TRUE}
 InsoNice <- read_delim("Data/SH_MIN006088001.csv", # "chemin d'acces aux donnees"
-    delim = ";", escape_double = FALSE, col_types = cols(YYYYMM = col_date(format = "%Y%m")), comment = "#", trim_ws = TRUE)
+    delim = ";", escape_double = FALSE, col_types = cols(YYYYMM = col_date(format = "%Y%m")), 
+    comment = "#", trim_ws = TRUE)
 
 InsoParis <- read_delim("Data/SH_MIN006088001.csv", # "chemin d'acces aux donnees"
-    delim = ";", escape_double = FALSE, col_types = cols(YYYYMM = col_date(format = "%Y%m")), comment = "#", trim_ws = TRUE)
+    delim = ";", escape_double = FALSE, col_types = cols(YYYYMM = col_date(format = "%Y%m")), 
+    comment = "#", trim_ws = TRUE)
 ```
 
 ```{r graphique_inso, fig.keep='last'}
