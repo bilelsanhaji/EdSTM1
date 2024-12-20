@@ -4,7 +4,7 @@ author: "Fiche TD #1"
 date: "Analyse de Séries Temporelles et Propriétés Stochastiques"
 #output: pdf_document
 ---
-
+ 
 ### Exercice 1
 
 Soit $X$ une variable aléatoire ayant une distribution avec une moyenne $\mu$ et une variance $\sigma^2$, et soit $Y_t = X$ pour tout $t$.
