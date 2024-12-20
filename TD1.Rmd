@@ -2,7 +2,7 @@
 title: "Économétrie des Séries Temporelles"
 author: "Fiche TD #1"
 date: "Analyse de Séries Temporelles et Propriétés Stochastiques"
-output: pdf_document
+#output: pdf_document
 ---
 
 ### Exercice 1
