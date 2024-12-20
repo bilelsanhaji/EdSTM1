@@ -1,8 +1,0 @@
----
-title: "Économétrie des Séries Temporelles"
-author: "Fiche TD #4"
-date: "Analyse VAR"
-#output: pdf_document
----
-
-### Exercice 1
