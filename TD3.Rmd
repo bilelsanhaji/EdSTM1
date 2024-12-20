@@ -1,0 +1,8 @@
+---
+title: "Économétrie des Séries Temporelles"
+author: "Fiche TD #3"
+date: "Racines unitaires et non-stationnarité"
+#output: pdf_document
+---
+
+### Exercice 1
