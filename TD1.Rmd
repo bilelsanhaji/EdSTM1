@@ -16,7 +16,7 @@ Soit $X$ une variable aléatoire ayant une distribution avec une moyenne $\mu$ e
 <br> \bigskip\bigskip
 
 testnamoux
-
+ 
 ### Exercice 2
 
 Pour chacun des processus suivants, déterminez s'il est :
