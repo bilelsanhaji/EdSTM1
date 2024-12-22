@@ -1,0 +1,69 @@
+---
+title: "Économétrie des Séries Temporelles"
+author: "Fiche TD `R` #1"
+date: "Analyse de Séries Temporelles et Propriétés Stochastiques"
+#output: pdf_document
+---
+ 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  error = TRUE,
+  fig.width = 10, 
+  fig.height = 5,
+  dpi = 600,
+  fig.keep ="last",
+  message = FALSE,
+  warning = FALSE,
+  results = "markup"
+)
+```
+
+### Packages
+
+```{r bibliotheques}
+library(readr)
+library(zoo)
+library(astsa)
+```
+
+### Données
+
+Nice : <https://drive.google.com/file/d/1QYI5dGRSb8jY2kxWyIOWhudSLalQt9Q5/view?usp=sharing>
+
+Paris : <https://drive.google.com/file/d/1Ptq3-aA2yFsw1nL3V0fPZ2-l81_J7VkX/view?usp=sharing>
+
+
+### Exercices
+
+1.  Donnez une représentation graphique des données d'insolation de Nice et Paris. Incluez graphiquement les moyennes respectives à l'aide de la fonction `abline()`.
+
+Tout d'abord, un chunk pour le chargement des données :
+
+```{r importation_InsoNice_InsoParis, echo=TRUE}
+InsoNice <- read_delim("Data/SH_MIN006088001.csv", # "chemin d'acces aux donnees"
+    delim = ";", escape_double = FALSE, col_types = cols(YYYYMM = col_date(format = "%Y%m")), 
+    comment = "#", trim_ws = TRUE)
+
+InsoParis <- read_delim("Data/SH_MIN006088001.csv", # "chemin d'acces aux donnees"
+    delim = ";", escape_double = FALSE, col_types = cols(YYYYMM = col_date(format = "%Y%m")), 
+    comment = "#", trim_ws = TRUE)
+```
+
+```{r graphique_inso, fig.keep='last'}
+# c'est dans ce chunk que vous devez principalement travailler
+plot(ts(rnorm(50))) # juste pour exemple
+```
+
+<br>
+
+\bigskip\bigskip
+
+2.  Simulez un processus complètement aléatoire de 51 observations avec des valeurs indépendantes pour ces "distributions" :
+
+    (a) $\mathsf{WN}$
+    (b) $\mathcal{N}(0,1)$
+    (c) $\chi^2_2$
+    (d) $t_5$
+
+Tracez le graphique de la série temporelle. Cela semble-t-il « aléatoire » ? Répétez cet exercice plusieurs fois avec une nouvelle simulation à chaque fois.
