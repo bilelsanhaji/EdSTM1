@@ -41,11 +41,11 @@ Paris : <https://drive.google.com/file/d/1Ptq3-aA2yFsw1nL3V0fPZ2-l81_J7VkX/view?
 Tout d'abord, un chunk pour le chargement des données :
 
 ```{r importation_InsoNice_InsoParis, echo=TRUE}
-InsoNice <- read_delim("Data/SH_MIN006088001.csv", # "chemin d'acces aux donnees"
+InsoNice <- read_delim("SH_MIN006088001.csv", # "chemin d'acces aux donnees"
     delim = ";", escape_double = FALSE, col_types = cols(YYYYMM = col_date(format = "%Y%m")), 
     comment = "#", trim_ws = TRUE)
 
-InsoParis <- read_delim("Data/SH_MIN006088001.csv", # "chemin d'acces aux donnees"
+InsoParis <- read_delim("SH_MIN006088001.csv", # "chemin d'acces aux donnees"
     delim = ";", escape_double = FALSE, col_types = cols(YYYYMM = col_date(format = "%Y%m")), 
     comment = "#", trim_ws = TRUE)
 ```
