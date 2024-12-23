@@ -602,6 +602,26 @@ où $\varepsilon_t \sim \text{NID}(0, \sigma^2)$ sont des innovations.
 
 ---
 
+### Dans la pratique (modélisation)
+
+$y_t$ sont les rendements de l'action Apple sur trois années autour de la période covid.
+
+```{r AAPLdata, echo=F}
+
+AAPL <- getSymbols(Symbols = 'AAPL', src = 'yahoo', from='2018-12-01', to='2020-12-01', auto.assign = FALSE)
+AAPL$Date = as.Date.character(AAPL$Date, format = "%Y/%m/%d") #changement du format dans la dataframe
+AAPL.date <- AAPL$Date #création de la variable date (non utilisée ici)
+AAPL.p <- AAPL$AAPL.Adjusted #création de la variable prix
+AAPL.r = na.omit(diff(log(AAPL.p))*100) #création de la variable rendements
+#summary(AAPL)
+```
+
+```{r AAPLgraph}
+tsplot(index(AAPL.r), AAPL.r, main = "APPLE", 
+       ylab = "Taux de rendement")
+```
+---
+
 # 9. Vraisemblance autorégressive
 
 **Densité conditionnelle** :
@@ -654,6 +674,17 @@ L'estimation par la méthode des moments (en utilisant les équations de Yule-Wa
 
 ---
 
+### Dans la pratique (estimation)
+
+On suppose une distribution conditionnelle gaussienne des $\varepsilon_t$. 
+
+```{r AAPLestim}
+AAPL.estim = arima(AAPL.r, order = c(1, 0, 0))
+coeftest(AAPL.estim)
+```
+
+---
+
 # 10. Analyse de la mauvaise spécification
 
 Les hypothèses faites lors de la construction de modèles économétriques.
@@ -692,6 +723,13 @@ Le test de **Jarque-Bera** - $H_{0} : \kappa_{3} = \kappa_{4} = 0$ pour la norma
 
 $JB=\frac{T-k}{6}\left(\kappa^3+\frac{(\kappa^4)^2}{4}\right) \sim \chi^{2}_{2}$ et $k$ le nombre de variables explicatives.
 
+### Dans la pratique 
+
+```{r}
+AAPL.resid = AAPL.estim$residuals
+jarque.bera.test(AAPL.resid)
+```
+
 ---
 
 ## Hétéroscédasticité
@@ -710,6 +748,31 @@ $$\widehat{\varepsilon}^{2}_{t} = \beta_{1} + \beta_{2} y_{t-1} + \beta_{3} y_{t
 $$T R^{2}_{het} \approx F_{het} = \frac{R^{2}_{het} / m}{(1 - R^{2}_{het}) / (T - k - m - 1)}$$
 
 où $k$ est le nombre de régresseurs et $m$ est le nombre de termes quadratiques et de produits croisés.
+
+Notez que le $TR^{2}_{het} \sim \chi_2^2$
+
+---
+
+### Dans la pratique (Test de White - hétéroscédasticité)
+```{r AAPLheterocse}
+# Étape 1 : Extraire les résidus
+residuals <- resid(AAPL.estim)
+# Étape 2 : Construire les termes quadratiques et croisés
+residuals_squared <- residuals^2
+x1 = lag(AAPL.r)
+x2 = lag(AAPL.r)^2
+auxiliary_data <- data.frame(x1, x2)
+# Supprimer les valeurs NA introduites par le décalage
+auxiliary_data <- na.omit(auxiliary_data)
+# Étape 3 : Régression auxiliaire pour le test de White
+auxiliary_model <- lm(residuals_squared ~ x1 + x2, data = auxiliary_data)
+# Étape 4 : Test de significativité globale (statistique de White)
+white_stat <- summary(auxiliary_model)$r.squared * nrow(auxiliary_data)  # Statistique du test
+p_value <- 1 - pchisq(white_stat, df = 2)  # Degré de liberté = nb de variables explicatives
+# Résultat : H0 - hétéroscédasticité
+cat("Statistique de White :", white_stat, "\n")
+cat("P-valeur :", p_value, "\n")
+```
 
 ---
 
@@ -732,6 +795,14 @@ $$y_{t} = \beta_{1} + \beta_{2} y_{t-1} + \beta_{3} \widehat{y}_{t}^{2} + \eta_{
 $$TR^{2}_{reset} \approx F_{reset} = \frac{R^{2}_{reset} / m}{(1 - R^{2}_{reset}) / (T - k - m - 1)}$$
 
 où $k$ est le nombre de régresseurs et $m$ est le nombre de restrictions.
+
+---
+
+### Dans la pratique (Test de Ramsey - erreur de spécification)
+
+```{r AAPLreset}
+# Devoir #1 - A faire (de préférence sous sa forme TR^2)
+```
 
 ---
 
@@ -781,6 +852,35 @@ On rejette $H_0$ si $Q(m)>q_{\alpha}$ avec $q_{\alpha}$ le $100(1-\alpha)$ quant
 
 ---
 
+### Dans la pratique (ACF et PACF)
+
+```{r AAPLacf}
+AAPL_ACF_PACF=acf2(resid(AAPL.estim), 
+                  main = "Résidus d'estimation AR(1) des rendements AAPL")
+```
+
+---
+
+### Dans la pratique (Test de Ljung-Box - absence d'autocorrélation)
+
+```{r AAPLautocoLB}
+Box.test(resid(AAPL.estim), lag = 1,  type = "Ljung")
+Box.test(resid(AAPL.estim), lag = 6,  type = "Ljung")
+Box.test(resid(AAPL.estim), lag = 12,  type = "Ljung")
+```
+
+---
+
+### Dans la pratique (Test de Box-Pierce - absence d'autocorrélation)
+
+```{r AAPLautocoBP}
+Box.test(resid(AAPL.estim), lag = 1,  type = "Box")
+Box.test(resid(AAPL.estim), lag = 6,  type = "Box")
+Box.test(resid(AAPL.estim), lag = 12,  type = "Box")
+```
+
+---
+
 ## Erreurs ARCH
 
 **Engle (1982)** : Hétéroscédasticité conditionnelle autorégressive
@@ -799,6 +899,20 @@ $$\widehat{\varepsilon}_{t}^{2} = \beta_{1} + \beta_{2} \widehat{\varepsilon}_{t
 $$T R^{2}_{arch} \approx F_{arch} = \frac{R^{2}_{arch} / m}{(1 - R^{2}_{arch}) / (T - k - m - 1)}$$
 
 où $k$ est le nombre de régresseurs et $m$ est le nombre de restrictions.
+
+---
+
+### Dans la pratique (Test d'Engle - ARCH)
+
+```{r AAPLarch, fig.height = 4}
+# L'un des proxies de la volatilité et l'élévation de la série au carré : 
+tsplot(index(AAPL.r), resid(AAPL.estim)^2, main = "Volatilité réalisée", 
+       ylab = expression(epsilon[t]^2), xlab = '')
+
+# Le test statistique, quant à lui, existe dans le package {FinTS}
+library(FinTS)
+ArchTest(resid(AAPL.estim), lags = 1)
+```
 
 ---
 
@@ -859,8 +973,8 @@ par(mfrow=c(2,1))
 tsplot(USunrate$date,USunrate$value, 
 main="Taux de chomage", ylab = "%", xlab='')
 # Si on avait dû différencier la série :
-tsplot(xDate[-1],diff(USunrate$value),main= "Taux de variation du taux de chomage", 
-ylab = "%", xlab='')
+tsplot(xDate[-1],diff(USunrate$value),
+      main= "Taux de variation du taux de chomage", ylab = "%", xlab='')
 ```
 
 ---
@@ -876,6 +990,10 @@ print(coefs)
 std_errors = sqrt(diag(fit$var.coef))
 p_values = 2 * (1 - pnorm(abs(coefs / std_errors)))
 print(p_values)
+
+# Ou simplement
+
+#coeftest(fit)
 
 #Résidus et serie ajustée
 xres = residuals(fit)
@@ -900,7 +1018,7 @@ points(xDate, xfit, type = "l", col = 2, lty = 2)
 <div style="margin-top: -0.8em;"></div>
 
 ```{r}
-Box.test(xres, lag=2, type="Ljung-Box")#H0: pas d'autocorrelation
+Box.test(xres, lag=2, type="Ljung-Box")#H0: abscence d'autocorrelation
 shapiro.test(xres)#H0: normalité
 bptest(xres ~ xfit)#H0: homoscédasticité
 ```
