@@ -53,6 +53,20 @@ knitr::opts_chunk$set(
 <!-- comme \vspace{} -->
 <!-- <div style="margin-top: -0.5em;"></div> -->
 
+```{r libs2, echo=FALSE}
+library(fredr) #https://fred.stlouisfed.org/docs/api/api_key.html
+fredr_set_key("229661c3a1cbd67e2388fafb768ca882") # ma clé perso
+library(astsa)
+library(xts)
+library(quantmod)
+library(tseries)
+library(lmtest)
+library(tidyverse)
+library(urca)
+library(forecast)
+library(FinTS)
+```
+
 ---
 
 # Structure du cours
@@ -257,16 +271,6 @@ pour $h \neq 0$.
 ---
 
 ## Processus AR(1) stationnaires
-
-```{r libs2, echo=FALSE}
-library(fredr) #https://fred.stlouisfed.org/docs/api/api_key.html
-fredr_set_key("229661c3a1cbd67e2388fafb768ca882")
-library(astsa)
-library(xts)
-library(quantmod)
-library(tseries)
-library(lmtest)
-```
 
 ```{r ar1statio, echo=FALSE}
 par(mfrow=c(3,3))
@@ -602,24 +606,57 @@ où $\varepsilon_t \sim \text{NID}(0, \sigma^2)$ sont des innovations.
 
 ---
 
-### Dans la pratique (modélisation)
+### Dans la pratique (modélisation - données)
 
 $y_t$ sont les rendements de l'action Apple sur trois années autour de la période covid.
 
-```{r AAPLdata, echo=F}
+```{r AAPLdata}
 
-AAPL <- getSymbols(Symbols = 'AAPL', src = 'yahoo', from='2018-12-01', to='2020-12-01', auto.assign = FALSE)
-AAPL$Date = as.Date.character(AAPL$Date, format = "%Y/%m/%d") #changement du format dans la dataframe
+AAPL <- getSymbols(Symbols = 'AAPL', src = 'yahoo', 
+                  from='2018-12-01', to='2020-12-01', auto.assign = FALSE)
+AAPL$Date = as.Date.character(AAPL$Date, format = "%Y/%m/%d") #changement 
+# du format dans la dataframe
 AAPL.date <- AAPL$Date #création de la variable date (non utilisée ici)
 AAPL.p <- AAPL$AAPL.Adjusted #création de la variable prix
-AAPL.r = na.omit(diff(log(AAPL.p))*100) #création de la variable rendements
-#summary(AAPL)
+AAPL.r = na.omit(diff(log(AAPL.p))*100) #création de la variable rendements 
+# stationnaires
+summary(cbind(AAPL.p[-1],AAPL.r))
 ```
+
+---
+
+### Dans la pratique (modélisation - stationarité, méthode *a la* {`tidyverse`})
+
+Test KPSS sur les prix - $H_0$ : données stationnaires
+
+```{r AAPL.p.kpss, echo=F}
+result.p <- AAPL.p %>% ur.kpss() %>% summary()
+list(
+  test_stat = result.p@teststat,
+  critical_values = result.p@cval
+)
+```
+
+
+Test KPSS sur les rendements - $H_0$ : données stationnaires
+
+```{r AAPL.r.kpss, echo=F}
+result.r <- AAPL.r %>% ur.kpss() %>% summary()
+list(
+  test_stat = result.r@teststat,
+  critical_values = result.r@cval
+)
+```
+
+---
+
+### Dans la pratique (modélisation - graphique)
 
 ```{r AAPLgraph}
 tsplot(index(AAPL.r), AAPL.r, main = "APPLE", 
        ylab = "Taux de rendement")
 ```
+
 ---
 
 # 9. Vraisemblance autorégressive
@@ -674,13 +711,88 @@ L'estimation par la méthode des moments (en utilisant les équations de Yule-Wa
 
 ---
 
-### Dans la pratique (estimation)
+### Dans la pratique (estimation - {`stats`})
 
 On suppose une distribution conditionnelle gaussienne des $\varepsilon_t$. 
 
 ```{r AAPLestim}
 AAPL.estim = arima(AAPL.r, order = c(1, 0, 0))
 coeftest(AAPL.estim)
+```
+
+---
+
+### Dans la pratique (estimation - {`forecast`})
+
+\vspace{-1.2em}
+
+```{r}
+fit = Arima(AAPL.r, order = c(1, 0, 0))
+checkresiduals(fit)
+```
+
+---
+
+### Dans la pratique (estimation - autoarima{`forecast`})
+
+```{r}
+fit = auto.arima(AAPL.r)
+fit
+```
+
+---
+
+### Dans la pratique (estimation - autoarima{`forecast`}, pvalues)
+
+```{r}
+coeftest(fit)
+```
+
+---
+
+### Dans la pratique (estimation - autoarima{`forecast`}, racines unitaires)
+
+```{r}
+autoplot(fit)
+```
+
+---
+
+### Dans la pratique (forecast - {`forecast`})
+
+```{r}
+autoplot(forecast(fit))
+```
+
+---
+
+### Dans la pratique (residuals check - autoarima{`forecast`})
+
+```{r}
+checkresiduals(fit)
+```
+
+---
+
+# AIC et BIC
+
+Pour effectuer une sélection de modèles avec des critères d'information. 
+
+AIC est la méthode de sélection de modèles la plus connue et utilisée. 
+
+**AIC** Akaike (1973) : 
+$$\mathsf{AIC} = -2 \times LogLik + 2 \times p$$
+
+**BIC** Schwarz (1978) :
+$$\mathsf{BIC} = -2 \times LogLik + \log(n) \times p$$
+
+avec $n$ le nombre d'observations dans l'échantillon étudié et $p$ le nombre de paramètres.
+
+**Plus petit est AIC/BIC, meilleur est le modèle**.
+
+```{r}
+AIC(AAPL.estim) #AR(1)
+AIC(fit)        #ARMA(4,1)
 ```
 
 ---
@@ -910,7 +1022,6 @@ tsplot(index(AAPL.r), resid(AAPL.estim)^2, main = "Volatilité réalisée",
        ylab = expression(epsilon[t]^2), xlab = '')
 
 # Le test statistique, quant à lui, existe dans le package {FinTS}
-library(FinTS)
 ArchTest(resid(AAPL.estim), lags = 1)
 ```
 
