@@ -155,10 +155,10 @@ Toutes les communications passent par là !
 ## Helmsdale at Kilpherid
 
 Flux d'une rivière (id 2001) : $m^3/s$, moyenne par jour, 01/01/1975 - 30/09/2022
-[https://nrfa.ceh.ac.uk/data/station/download?stn=2001&dt=gdf]
+https://nrfa.ceh.ac.uk/data/station/download?stn=2001&dt=gdf
 
 ```{r, echo=F}
-riverflowUK = read.csv("riverflowUK.csv")
+riverflowUK = read.csv("/Users/bsanhaji/My Drive/Projets/P8 Cours/2024-2025/S2/M1 79.5 - Econometrie des Series Temporelles/EdST M1 MBFA/EdSTM1git/Data/riverflowUK.csv")
 RFUKdate = as.Date(riverflowUK$Date)
 par(mfrow = c(2, 1), mar = c(2, 6, 4, 1))
 plot(RFUKdate,riverflowUK$Data,type = "l", main = "1975 - 2022",  xlab="", ylab = "m3/s")
