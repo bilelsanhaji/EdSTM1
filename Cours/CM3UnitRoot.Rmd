@@ -111,9 +111,9 @@ library(urca)
 ```{r, echo=F}
 par(mfrow=c(3,1))
 x = arima.sim(list(order = c(1,0,0), ar = 0.95), n = 200)
-tsplot(x, main = "AR(1), ar = 0.95")
+tsplot(x, main= expression("AR(1), "~alpha~ "= 0.95"))
 x = arima.sim(list(order = c(1,0,0), ar = 0.9999), n = 200)
-tsplot(x, main = "Marche Aléatoire, ar = 1")
+tsplot(x, main = expression("Marche aléatoire, "~alpha~ "= 1"))
 # Définir les paramètres
 set.seed(123)  # Pour la reproductibilité
 T <- 200  # Nombre total de périodes
@@ -130,7 +130,7 @@ for (t in 2:T) {
 
 # Tracer la série temporelle
 plot(yt, type = "l", col = "blue", 
-main = " Process AR(1) explosif", ylab = "", xlab = "")
+main = expression("Process AR(1) explosif, "~alpha~ "> 1"), ylab = "", xlab = "")
 ```
 
 ---
@@ -174,14 +174,14 @@ for (t in 2:T) {
 # Tracer la série temporelle
 par(mfrow=c(2,1))
 tsplot(yt, type = "l", col = "blue", main = "Process simulé", ylab = "", xlab = "")
-tsplot(diff(yt), type = "l", col = "blue", main = "Process simulé différencié", ylab = "", xlab = "")
+tsplot(diff(yt), type = "l", col = "blue", main = "Process différencié simulé", ylab = "", xlab = "")
 abline(h = mean(diff(yt)), col = "red", lty = 2, lwd = 2)
 legend("topright", legend = "Moyenne", col = "red", lty = 2, lwd = 2, bty = "n")
 ```
 
 ---
 
-## 1 Processus stationnaires de différence (DS) et de tendance (TS)
+# 1. Processus stationnaires de différence (DS) et de tendance (TS)
 
 Modèle stationnaire de tendance :
 
@@ -264,21 +264,25 @@ Peu probable de se produire en pratique, sauf localement.
 
 ---
 
-<!-- ### Processus à racine unitaire
+### Processus à racine unitaire
 
 Le processus à racine unitaire est donné par :
+
 $$\begin{aligned}
 y_{t} &= \mu + y_{t-1} + \varepsilon_{t} \\
 &= \mu t + y_{0} + \sum_{j=1}^{t} \varepsilon_{j}
 \end{aligned}$$
+
 où $\sum_{j=1}^{t} \varepsilon_{j}$ est une marche aléatoire ;
+
 $y_{0}$ est la condition initiale ;
+
 et $\mu t$ est le terme de dérive.
 
 **Problème :** La théorie de la distribution pour les estimateurs et les statistiques de test diffère du cas transversal/stationnaire -- en raison de la dépendance temporelle. 
--->
 
-## Régression fallacieuse
+
+# 2. Régression fallacieuse
 
 Deux séries non apparentées $\mathsf{I}(1)$.
 
@@ -406,7 +410,7 @@ Par conséquent, ${\mathsf t} = \frac{\widehat{\beta}_{1}}{\widehat{\sigma}_{\be
 
 ---
 
-# Tests de racine unitaire
+# 3. Tests de racine unitaire
 
 ## Dickey-Fuller test
 
@@ -508,7 +512,7 @@ $\mathsf{H}_{0} : \gamma = 0$ versus $\mathsf{H}_{1} : \gamma < 0$; car $\gamma 
 
 ---
 
-# Augmented Dickey-Fuller Test
+## Augmented Dickey-Fuller Test
 
 Le test est considéré sur la base d'un processus AR(1).
 Si le DGP est un processus AR(p) :
@@ -563,7 +567,7 @@ $$\begin{aligned}
 
 ---
 
-# Illustration empirique
+# 4. Illustration empirique
 
 ## Données 
 
@@ -740,7 +744,7 @@ qqline(yres)
 
 ---
 
-# Conclusion
+# 5. Conclusion
 
 Les tests de racine unitaire - les estimateurs sont standard - OLS
 

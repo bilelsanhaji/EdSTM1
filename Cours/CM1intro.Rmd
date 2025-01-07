@@ -141,7 +141,7 @@ tsplot(IRT10$date, IRT10$value,
 
 ---
 
-## Structure du cours
+# Structure du cours
 
 Modèles empiriques
 
