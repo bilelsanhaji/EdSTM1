@@ -37,7 +37,7 @@ library(stats)
 Nice : <https://github.com/bilelsanhaji/EdSTM1/blob/main/Data/SH_MIN006088001.csv>
 
 Paris : <https://github.com/bilelsanhaji/EdSTM1/blob/main/Data/SH_MIN175114001.csv>
-
+ 
 ### Exercice 1
 
 À partir des données d'insolation de Nice et Paris, utilisez les séries pour
