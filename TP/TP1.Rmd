@@ -33,9 +33,9 @@ Nice : <https://github.com/bilelsanhaji/EdSTM1/blob/main/Data/SH_MIN006088001.cs
 
 Paris : <https://github.com/bilelsanhaji/EdSTM1/blob/main/Data/SH_MIN175114001.csv>
 
-### Exercices
+### Exercice 1
 
-1.  Donnez une représentation graphique des données d'insolation de Nice et Paris. Incluez graphiquement les moyennes respectives à l'aide de la fonction `abline()`.
+Donnez une représentation graphique des données d'insolation de Nice et Paris. Incluez graphiquement les moyennes respectives à l'aide de la fonction `abline()`.
 
 Tout d'abord, un chunk pour le chargement des données :
 
@@ -86,7 +86,9 @@ abline(h = moyenne_Paris, col = "red", lty = 3, lwd = 2)
 
 \bigskip\bigskip
 
-2.  Simulez un processus complètement aléatoire de 51 observations avec des valeurs indépendantes pour ces "distributions" :
+### Exercice 2  
+
+Simulez un processus complètement aléatoire de 51 observations avec des valeurs indépendantes pour ces "distributions" :
 
     (a) $\mathsf{WN}$
     (b) $\mathcal{N}(0,1)$
