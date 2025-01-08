@@ -55,12 +55,10 @@ ts_Nice <- zoo(InsoNice$VALEUR, order.by = InsoNice$YYYYMM)
 # ou 
 NiceDate = InsoNice$YYYYMM
 
-
 Paris = InsoParis$VALEUR
 ts_Paris <- zoo(InsoParis$VALEUR, order.by = InsoParis$YYYYMM)
 # ou 
 ParisDate = InsoParis$YYYYMM
-
 
 moyenne_Nice <- mean(ts_Nice) 
 moyenne_Paris <- mean(ts_Paris)
