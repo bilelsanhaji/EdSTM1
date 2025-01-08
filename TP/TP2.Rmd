@@ -49,7 +49,7 @@ Paris : <https://github.com/bilelsanhaji/EdSTM1/blob/main/Data/SH_MIN175114001.c
   3. la normalité
   4. l'hétéroscédasticité
 
-(b) estimez et interprétez un AR(1) pour chaque série, puis, sur les résidus :
+(b) estimer et interpréter un AR(1) pour chaque série, puis, sur les résidus :
   1. refaire les tests effectués dans la partie (a)
   2. interprétez tous les résultats obtenus
   3. discutez la différence qu'il y a entre les séries
@@ -58,7 +58,7 @@ Paris : <https://github.com/bilelsanhaji/EdSTM1/blob/main/Data/SH_MIN175114001.c
 
 Simulez un processus AR(1) stationnaire avec 50 observations. Puis 
 
-(a) "tester" graphiquement et tester statistiquement : 
+(a) "testez" graphiquement et testez statistiquement : 
   1. la stationarité 
   2. l'autocorrélation
   3. la normalité
