@@ -1,0 +1,70 @@
+---
+title: "Économétrie des Séries Temporelles"
+author: "Fiche TD `R` #2"
+date: "Processus ARMA stationnaires"
+output: pdf_document
+#output:
+ # html_document:
+  #  mathjax: default
+---
+ 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  error = TRUE,
+  fig.width = 10, 
+  fig.height = 5,
+  dpi = 600,
+  fig.keep ="last",
+  message = FALSE,
+  warning = FALSE,
+  results = "markup"
+)
+```
+
+### Packages
+
+```{r bibliotheques}
+library(readr)
+library(zoo)
+library(astsa)
+library(forecast)
+library(stats)
+```
+
+### Données (identiques au TP1)
+
+Nice : <https://github.com/bilelsanhaji/EdSTM1/blob/main/Data/SH_MIN006088001.csv>
+
+Paris : <https://github.com/bilelsanhaji/EdSTM1/blob/main/Data/SH_MIN175114001.csv>
+
+
+### Exercice 1
+
+À partir des données d'insolation de Nice et Paris, utilisez les séries pour
+
+(a) donner une représentation graphique et tester statistiquement : 
+  1. la stationarité 
+  2. l'autocorrélation
+  3. la normalité
+  4. l'hétéroscédasticité
+
+(b) estimez et interprétez un AR(1) pour chaque série, puis, sur les résidus :
+  1. refaire les tests effectués dans la partie (a)
+  2. interprétez tous les résultats obtenus
+  3. discutez la différence qu'il y a entre les séries
+
+### Exercice 2
+
+Simulez un processus AR(1) stationnaire avec 50 observations. Puis 
+
+(a) "tester" graphiquement et tester statistiquement : 
+  1. la stationarité 
+  2. l'autocorrélation
+  3. la normalité
+  4. l'hétéroscédasticité
+
+(b) estimez la série simulée et discutez les résultats
+(c) reproduire les étapes (a) et (b) avec 5000 observations
+
+
