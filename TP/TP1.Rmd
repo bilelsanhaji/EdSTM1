@@ -4,7 +4,7 @@ author: "Fiche TD `R` #1"
 date: "Analyse de Séries Temporelles et Propriétés Stochastiques"
 output: pdf_document
 ---
-
+ 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = TRUE,
