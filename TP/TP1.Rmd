@@ -40,18 +40,46 @@ Paris : <https://drive.google.com/file/d/1Ptq3-aA2yFsw1nL3V0fPZ2-l81_J7VkX/view?
 Tout d'abord, un chunk pour le chargement des données :
 
 ```{r importation_InsoNice_InsoParis, echo=TRUE}
-InsoNice <- read_delim("SH_MIN006088001.csv", # "chemin d'acces aux donnees"
+InsoNice <- read_delim("~/My Drive/Projets/P8 Cours/2024-2025/S2/M1 79.5 - Econometrie des Series Temporelles/EdST M1 MBFA/EdSTgit/Data/SH_MIN006088001.csv", # "chemin d'acces aux donnees"
     delim = ";", escape_double = FALSE, col_types = cols(YYYYMM = col_date(format = "%Y%m")), 
     comment = "#", trim_ws = TRUE)
 
-InsoParis <- read_delim("SH_MIN006088001.csv", # "chemin d'acces aux donnees"
+InsoParis <- read_delim("~/My Drive/Projets/P8 Cours/2024-2025/S2/M1 79.5 - Econometrie des Series Temporelles/EdST M1 MBFA/EdSTgit/Data/SH_MIN175114001.csv", # "chemin d'acces aux donnees"
     delim = ";", escape_double = FALSE, col_types = cols(YYYYMM = col_date(format = "%Y%m")), 
     comment = "#", trim_ws = TRUE)
 ```
 
-```{r graphique_inso, fig.keep='last'}
-# c'est dans ce chunk que vous devez principalement travailler
-plot(ts(rnorm(50))) # juste pour exemple
+```{r graphique_inso, fig.keep='all'}
+Nice = InsoNice$VALEUR
+ts_Nice <- zoo(InsoNice$VALEUR, order.by = InsoNice$YYYYMM)
+# ou 
+NiceDate = InsoNice$YYYYMM
+
+
+Paris = InsoParis$VALEUR
+ts_Paris <- zoo(InsoParis$VALEUR, order.by = InsoParis$YYYYMM)
+# ou 
+ParisDate = InsoParis$YYYYMM
+
+
+moyenne_Nice <- mean(ts_Nice) 
+moyenne_Paris <- mean(ts_Paris)
+
+par(mfrow=c(2,1)) 
+
+tsplot(ts_Nice,
+     main = "Durées d'insolation (Nice)",
+     xlab = "Années",
+     ylab = "Heures et 1/10",
+     col = "darkblue")
+abline(h = moyenne_Nice, col = "blue", lty = 3, lwd = 2)
+
+tsplot(ts_Paris, 
+       main = "Durées d'insolation (Paris)", 
+       xlab = "Années",
+       ylab = "Heures et 1/10",
+       col = "darkblue")
+abline(h = moyenne_Paris, col = "red", lty = 3, lwd = 2)
 ```
 
 <br>
@@ -66,3 +94,15 @@ plot(ts(rnorm(50))) # juste pour exemple
     (d) $t_5$
 
 Tracez le graphique de la série temporelle. Cela semble-t-il « aléatoire » ? Répétez cet exercice plusieurs fois avec une nouvelle simulation à chaque fois.
+
+```{r, fig.keep='all'}
+par(mfrow=c(2,2)) 
+tsplot(runif(100), main="White Noise") 
+tsplot(rnorm(51), main = "Normale") 
+tsplot(rchisq(51, 2), main = "Chi-deux") 
+tsplot(rt(51, 5), main = "Student") 
+#plot(rnorm(51), type='l') 
+#plot(as.ts(rnorm(51)))
+ 
+```
+
