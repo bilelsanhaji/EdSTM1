@@ -7,7 +7,7 @@ output: pdf_document
  # html_document:
   #  mathjax: default
 ---
-
+ 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = TRUE,
