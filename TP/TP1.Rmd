@@ -2,7 +2,7 @@
 title: "Économétrie des Séries Temporelles"
 author: "Fiche TD `R` #1"
 date: "Analyse de Séries Temporelles et Propriétés Stochastiques"
-#output: pdf_document
+output: pdf_document
 ---
 
 ```{r setup, include=FALSE}
@@ -29,9 +29,9 @@ library(astsa)
 
 ### Données
 
-Nice : <https://drive.google.com/file/d/1QYI5dGRSb8jY2kxWyIOWhudSLalQt9Q5/view?usp=sharing>
+Nice : <https://github.com/bilelsanhaji/EdSTM1/blob/main/Data/SH_MIN006088001.csv>
 
-Paris : <https://drive.google.com/file/d/1Ptq3-aA2yFsw1nL3V0fPZ2-l81_J7VkX/view?usp=sharing>
+Paris : <https://github.com/bilelsanhaji/EdSTM1/blob/main/Data/SH_MIN175114001.csv>
 
 ### Exercices
 
@@ -49,7 +49,7 @@ InsoParis <- read_delim("~/My Drive/Projets/P8 Cours/2024-2025/S2/M1 79.5 - Econ
     comment = "#", trim_ws = TRUE)
 ```
 
-```{r graphique_inso, fig.keep='all'}
+```{r graphique_inso, fig.keep='last'}
 Nice = InsoNice$VALEUR
 ts_Nice <- zoo(InsoNice$VALEUR, order.by = InsoNice$YYYYMM)
 # ou 
