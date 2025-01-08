@@ -7,7 +7,7 @@ output: pdf_document
  # html_document:
   #  mathjax: default
 ---
- 
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   echo = TRUE,
@@ -38,33 +38,33 @@ Nice : <https://github.com/bilelsanhaji/EdSTM1/blob/main/Data/SH_MIN006088001.cs
 
 Paris : <https://github.com/bilelsanhaji/EdSTM1/blob/main/Data/SH_MIN175114001.csv>
 
-
 ### Exercice 1
 
 À partir des données d'insolation de Nice et Paris, utilisez les séries pour
 
-(a) donner une représentation graphique et tester statistiquement : 
-  1. la stationarité 
-  2. l'autocorrélation
-  3. la normalité
-  4. l'hétéroscédasticité
+(a) donner une représentation graphique et tester statistiquement :
+
+1.  la stationarité
+2.  l'autocorrélation
+3.  la normalité
+4.  l'hétéroscédasticité
 
 (b) estimer et interpréter un AR(1) pour chaque série, puis, sur les résidus :
-  1. refaire les tests effectués dans la partie (a)
-  2. interprétez tous les résultats obtenus
-  3. discutez la différence qu'il y a entre les séries
+
+1.  refaire les tests effectués dans la partie (a)
+2.  interprétez tous les résultats obtenus
+3.  discutez la différence qu'il y a entre les séries
 
 ### Exercice 2
 
-Simulez un processus AR(1) stationnaire avec 50 observations. Puis 
+Simulez un processus AR(1) stationnaire avec 50 observations. Puis
 
-(a) "testez" graphiquement et testez statistiquement : 
-  1. la stationarité 
-  2. l'autocorrélation
-  3. la normalité
-  4. l'hétéroscédasticité
+(a) "testez" graphiquement et testez statistiquement :
+
+1.  la stationarité
+2.  l'autocorrélation
+3.  la normalité
+4.  l'hétéroscédasticité
 
 (b) estimez la série simulée et discutez les résultats
 (c) reproduire les étapes (a) et (b) avec 5000 observations
-
-
