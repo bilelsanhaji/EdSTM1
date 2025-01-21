@@ -639,7 +639,7 @@ où $\varepsilon_t \sim \text{NID}(0, \sigma^2)$ sont des innovations.
 
 ------------------------------------------------------------------------
 
-### Dans la pratique (modélisation - données)
+### Dans la pratique : modélisation - données
 
 $y_t$ sont les rendements de l'action Apple sur trois années autour de
 la période covid.
@@ -660,7 +660,7 @@ summary(cbind(AAPL.p[-1],AAPL.r))
 
 ------------------------------------------------------------------------
 
-### Dans la pratique (modélisation - stationarité, méthode *a la* {`tidyverse`})
+### Dans la pratique : modélisation - stationarité, méthode *a la* {`tidyverse`}
 
 Test KPSS sur les prix - $H_0$ : données stationnaires
 
@@ -684,7 +684,7 @@ list(
 
 ------------------------------------------------------------------------
 
-### Dans la pratique (modélisation - graphique)
+### Dans la pratique : modélisation - graphique
 
 ```{r AAPLgraph}
 tsplot(index(AAPL.r), AAPL.r, main = "APPLE", 
@@ -754,7 +754,7 @@ Yule-Walker) est également équivalente pour $\alpha$.
 
 ------------------------------------------------------------------------
 
-### Dans la pratique (estimation - {`stats`})
+### Dans la pratique : estimation - {`stats`}
 
 On suppose une distribution conditionnelle gaussienne des
 $\varepsilon_t$.
@@ -766,9 +766,9 @@ coeftest(AAPL.estim)
 
 ------------------------------------------------------------------------
 
-### Dans la pratique (estimation - {`forecast`})
+### Dans la pratique : estimation - {`forecast`}
 
-\vspace{-1.2em}
+\vspace{-.2em}
 
 ```{r}
 fit = Arima(AAPL.r, order = c(1, 0, 0))
@@ -777,7 +777,7 @@ checkresiduals(fit)
 
 ------------------------------------------------------------------------
 
-### Dans la pratique (estimation - autoarima{`forecast`})
+### Dans la pratique : estimation - autoarima{`forecast`}
 
 ```{r}
 fit = auto.arima(AAPL.r)
@@ -786,7 +786,7 @@ fit
 
 ------------------------------------------------------------------------
 
-### Dans la pratique (estimation - autoarima{`forecast`}, pvalues)
+### Dans la pratique : estimation - autoarima{`forecast`}, pvalues
 
 ```{r}
 coeftest(fit)
@@ -794,7 +794,7 @@ coeftest(fit)
 
 ------------------------------------------------------------------------
 
-### Dans la pratique (estimation - autoarima{`forecast`}, racines unitaires)
+### Dans la pratique : estimation - autoarima{`forecast`}, racines unitaires
 
 ```{r}
 autoplot(fit)
@@ -802,7 +802,7 @@ autoplot(fit)
 
 ------------------------------------------------------------------------
 
-### Dans la pratique (forecast - {`forecast`})
+### Dans la pratique : forecast - {`forecast`}
 
 ```{r}
 autoplot(forecast(fit))
@@ -810,7 +810,7 @@ autoplot(forecast(fit))
 
 ------------------------------------------------------------------------
 
-### Dans la pratique (residuals check - autoarima{`forecast`})
+### Dans la pratique : residuals check - autoarima{`forecast`}
 
 ```{r}
 checkresiduals(fit)
@@ -841,13 +841,14 @@ AIC(fit)        #ARMA(4,1)
 
 ------------------------------------------------------------------------
 
-# 10. Analyse de la mauvaise spécification
+# 10. Analyse de la mauvaise spécification et des résidus :
+## Tests de mauvaise spécification et Tests de diagnostic
 
 Les hypothèses faites lors de la construction de modèles économétriques.
 
 Exemple -- Modèle AR(1) :
 
-$$y_{t} = \nu + \alpha y_{t-1} + \varepsilon_{t} \label{ar1}$$
+$$y_{t} = \nu + \alpha y_{t-1} + \varepsilon_{t}$$
 
 Le modèle statistique conditionnel de $y_{1}, y_{2}, \ldots, y_{T}$
 étant donné $y_{0}$ est défini par les hypothèses suivantes :
@@ -888,7 +889,7 @@ et $k$ le nombre de variables explicatives.
 
 ---
 
-### Dans la pratique
+### Dans la pratique : normalité des résidus
 
 ```{r, fig.keep='last'}
 AAPL.resid = AAPL.estim$residuals
@@ -922,7 +923,7 @@ Notez que le $TR^{2}_{het} \sim \chi_2^2$
 
 ------------------------------------------------------------------------
 
-### Dans la pratique (Test de White - hétéroscédasticité)
+### Dans la pratique : Test de White - hétéroscédasticité
 
 ```{r AAPLheterocse}
 # Étape 1 : Extraire les résidus
@@ -973,10 +974,11 @@ restrictions.
 
 ------------------------------------------------------------------------
 
-### Dans la pratique (Test de Ramsey - erreur de spécification)
+### Dans la pratique : Test de Ramsey - erreur de spécification
 
 ```{r AAPLreset}
 # Devoir #1 - A faire (de préférence sous sa forme TR^2)
+
 ```
 
 ------------------------------------------------------------------------
@@ -993,9 +995,9 @@ où $\varepsilon_{t} \sim \mathsf{NID}(0, \sigma^{2})$.
 Test du rapport de vraisemblance pour $\alpha_{2} = 0$ :
 
 $$LR = -T \log \left(1 - r_{02.1}^{2}\right)$$
+où $r_{02.1}^{2}$ est le coefficient de détermination partiel entre $y_t$ et $y_{t-2}$ conditionnellement à $y_{t-1}$.
 
-Cela peut être appliqué à la régression auxiliaire -- obtenir
-$R^{2}_{ar}$ à partir de :
+Test LM : régression auxiliaire -- obtenir $R^{2}_{ar}$ à partir de :
 
 $$\widehat{\varepsilon}_{t} = \beta_{1} + \beta_{2} y_{t-1} + \beta_{3} \widehat{\varepsilon}_{t-1} + \eta_{t}$$
 
@@ -1008,7 +1010,7 @@ restrictions.
 
 ------------------------------------------------------------------------
 
-## Test d'absence d'autocorrélation
+## Autocorrélation
 
 ### Box-Pierce et Ljung-Box
 
@@ -1016,10 +1018,11 @@ $H_0$ : absence d'autocorrélation
 
 $H_1$ : autocorrélation
 
-Idée principale : On estime la fonction d'autocorrélation
+Idée principale : On estime la fonction d'autocorrélation et on teste si elle est nulle jusqu'à un certain nombre de retards $m$.
 
-$$ H_0 : \rho(1) =  \rho(2) = \cdots = \rho(p) =0 $$ La statistique du
-Ljung-Box est donnée par :
+$$ H_0 : \rho(1) =  \rho(2) = \cdots = \rho(m) =0 $$ 
+
+La statistique du test Ljung-Box :
 
 $$ Q(m) = T(T+2) \sum_{h=1}^{m} \frac{\widehat{\rho}(h)^2}{T-h} $$
 
@@ -1031,7 +1034,27 @@ $100(1-\alpha)$ quantile d'une $\chi^2_{m-p-q}$
 
 ------------------------------------------------------------------------
 
-### Dans la pratique (ACF et PACF)
+### Dans la pratique : ACF et PACF d'un bruit blanc gaussien
+
+```{r GWNacf}
+z <- rnorm(501)
+AAPL_ACF_PACF=acf2(z, # 501 observations : comme les résidus
+                  main = "Bruit Blanc Gaussien")
+```
+
+------------------------------------------------------------------------
+
+### Dans la pratique : Test de Ljung-Box - absence d'autocorrélation sur GWN
+
+```{r GWNautocoLB}
+Box.test(z, lag = 1,  type = "Ljung")
+Box.test(z, lag = 6,  type = "Ljung")
+Box.test(z, lag = 12,  type = "Ljung")
+```
+
+------------------------------------------------------------------------
+
+### Dans la pratique : ACF et PACF des résidus
 
 ```{r AAPLacf}
 AAPL_ACF_PACF=acf2(resid(AAPL.estim), 
@@ -1040,7 +1063,7 @@ AAPL_ACF_PACF=acf2(resid(AAPL.estim),
 
 ------------------------------------------------------------------------
 
-### Dans la pratique (Test de Ljung-Box - absence d'autocorrélation)
+### Dans la pratique : Test de Ljung-Box - absence d'autocorrélation
 
 ```{r AAPLautocoLB}
 Box.test(resid(AAPL.estim), lag = 1,  type = "Ljung")
@@ -1050,7 +1073,17 @@ Box.test(resid(AAPL.estim), lag = 12,  type = "Ljung")
 
 ------------------------------------------------------------------------
 
-### Dans la pratique (Test de Box-Pierce - absence d'autocorrélation)
+### Dans la pratique : Test de Ljung-Box - absence d'autocorrélation V2
+
+```{r AAPLautocoLBV2}
+Box.test(resid(AAPL.estim), lag = 20,  type = "Ljung")
+Box.test(resid(AAPL.estim), lag = 250,  type = "Ljung")
+Box.test(resid(AAPL.estim), lag = 8,  type = "Ljung")
+```
+
+------------------------------------------------------------------------
+
+### Dans la pratique : Test de Box-Pierce - absence d'autocorrélation
 
 ```{r AAPLautocoBP}
 Box.test(resid(AAPL.estim), lag = 1,  type = "Box")
@@ -1082,7 +1115,7 @@ restrictions.
 
 ------------------------------------------------------------------------
 
-### Dans la pratique (Test d'Engle - ARCH)
+### Dans la pratique : Test d'Engle - ARCH
 
 ```{r AAPLarch, fig.height = 4}
 # L'un des proxies de la volatilité et l'élévation de la série au carré : 
@@ -1193,7 +1226,7 @@ points(xDate, xfit, type = "l", col = 2, lty = 2)
 
 ------------------------------------------------------------------------
 
-## Tests de mauvaises spécification
+## Tests de diagnostic
 
 ::: {style="margin-top: -0.8em;"}
 :::
