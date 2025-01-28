@@ -193,22 +193,18 @@ $$\text{cov}(y_{t}, y_{t-h}) = \gamma_{t}(h) = (t - h) \sigma^{2}$$
 ## Marche aléatoire avec dérive - graph
 
 ```{r, echo=F}
-# Définir les paramètres
-set.seed(123)  # Pour la reproductibilité
-T <- 500  # Nombre total de périodes
-y0 <- 0  # Valeur initiale
-mu <- 0.4  # Coefficient de tendance
-
-# Initialiser la série temporelle
-yt <- numeric(T)
-yt[1] <- y0  # Valeur initiale
-
+# Paramètres
+nobs <- 500 
+y0 <- 0  
+mu <- 0.4 
+# Initialisation de la série temporelle
+yt <- numeric(nobs)
+yt[1] <- y0 
 # Simuler le processus
-for (t in 2:T) {
-  yt[t] <- yt[t-1] + mu + rnorm(1)
+for (t in 2:nobs) {
+  yt[t] <- yt[t-1] + mu + rnorm(1, 0, 2) # sd=2 pour accentuer l'illustration
 }
-
-# Tracer la série temporelle
+# Graph de la série temporelle
 par(mfrow=c(2,1))
 tsplot(yt, type = "l", col = "blue", main = "Process simulé", ylab = "", xlab = "")
 tsplot(diff(yt), type = "l", col = "blue", main = "Process différencié simulé", ylab = "", xlab = "")
@@ -263,38 +259,32 @@ $$y_t - (\mu + \beta t) = u_t.$$
 ## Stationnaire en tendance
 
 ```{r, echo=F}
-# Définir les paramètres
-set.seed(123)  # Pour la reproductibilité
-T <- 500       # Nombre total de périodes
+# chatgpt en appui pour mise en forme
+# Paramètres
+nobs <- 500       # Nombre total de périodes
 y0 <- 0        # Valeur initiale
 mu <- 0.4      # Coefficient de tendance
-
-# Simuler le processus TS
-t_seq <- 1:T                     # Périodes de temps
+# Processus TS
+t_seq <- 1:nobs                  # Périodes de temps
 trend <- y0 + mu * t_seq         # Tendance déterministe
-noise <- rnorm(T, mean = 0, sd = 9)  # Bruit blanc avec forte variabilité pour illustrer
+noise <- rnorm(nobs, mean = 0, sd = 9)  # Bruit blanc avec forte variabilité pour illustrer
 yt <- trend + noise              # Processus TS : tendance + bruit
-
 # Dé-trendation : supprimer la tendance déterministe
 yt_detrended <- yt - trend
-
 # Tracer la série temporelle
 par(mfrow = c(2, 1))  # Deux graphiques empilés
-
 # Graphique 1 : Série avec tendance
 plot.ts(yt, type = "l", col = "blue", main = "Processus stationnaire en tendance (TS)", 
         ylab = "y_t", xlab = "Temps")
 lines(trend, col = "red", lty = 2)  # Ajouter la tendance déterministe
 legend("topleft", legend = c("y_t", "Tendance"), col = c("blue", "red"), 
        lty = c(1, 2), bty = "n", cex = 0.8)
-
 # Graphique 2 : Série dé-trendée
 plot.ts(yt_detrended, type = "l", col = "blue", 
         main = "Série dé-trendée (stationnaire)", ylab = "y_t - tendance", xlab = "Temps")
 abline(h = 0, col = "red", lty = 2)  # Moyenne de la série dé-trendée
 legend("topleft", legend = c("Série dé-trendée", "Moyenne (h=0)"), 
        col = c("blue", "red"), lty = c(1, 2), bty = "n", cex = 0.8)
-
 ```
 
 --- 
