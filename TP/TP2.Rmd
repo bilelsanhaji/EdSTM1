@@ -30,6 +30,9 @@ library(zoo)
 library(astsa)
 library(forecast)
 library(stats)
+library(tseries)
+library(aTSA)
+#install.packages("aTSA")
 ```
 
 ### Données (identiques au TP1)
@@ -37,7 +40,28 @@ library(stats)
 Nice : <https://github.com/bilelsanhaji/EdSTM1/blob/main/Data/SH_MIN006088001.csv>
 
 Paris : <https://github.com/bilelsanhaji/EdSTM1/blob/main/Data/SH_MIN175114001.csv>
- 
+
+```{r DataImport}
+urlSHnice <- "https://raw.githubusercontent.com/bilelsanhaji/EdSTM1/refs/heads/main/Data/SH_MIN006088001.csv"
+InsoNice <- read_delim(urlSHnice, 
+                       delim = ";",
+                       escape_double = FALSE,
+                       col_types = cols(YYYYMM = col_date(format = "%Y%m")), 
+                       comment = "#", trim_ws = TRUE)
+
+urlSHparis <- "https://raw.githubusercontent.com/bilelsanhaji/EdSTM1/refs/heads/main/Data/SH_MIN175114001.csv"
+InsoParis <- read_delim(urlSHparis,
+                        delim = ";",
+                        escape_double = FALSE,
+                        col_types = cols(YYYYMM = col_date(format = "%Y%m")),
+                        comment = "#", trim_ws = TRUE)
+```
+```{r value}
+Nice_ts = ts(InsoNice$VALEUR)
+Paris_ts = ts(InsoParis$VALEUR)
+```
+
+
 ### Exercice 1
 
 À partir des données d'insolation de Nice et Paris, utilisez les séries pour
@@ -45,9 +69,14 @@ Paris : <https://github.com/bilelsanhaji/EdSTM1/blob/main/Data/SH_MIN175114001.c
 (a) donner une représentation graphique et tester statistiquement :
 
 1.  la stationarité
-2.  l'autocorrélation
-3.  la normalité
-4.  l'hétéroscédasticité
+```{r}
+tseries::adf.test(Nice_ts)
+```
+```{r}
+aTSA::adf.test(Nice_ts)
+```
+
+
 
 (b) estimer et interpréter un AR(1) pour chaque série, puis, sur les résidus :
 
