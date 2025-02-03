@@ -2,20 +2,20 @@
 title: "Processus ARMA stationnaires"
 author: "Chapitre 2"
 date: "Économétrie des séries temporelles"
-output:
-  beamer_presentation:
-    number_sections: true
-    toc: true
-header-includes:
-  - \usepackage{amsmath}
-  - \usepackage{amsfonts}
-  - \usepackage{amssymb}
-  - \setbeamertemplate{footline}{\hfill\raisebox{2pt}[0pt][0pt]\scriptsize{Économétrie des         Séries Temporelles - Chapitre 2}\hspace*{10pt} {\insertframenumber{} /                     \inserttotalframenumber}\hspace*{2pt}
-    }
-fontsize: 8pt
-editor_options: 
-  markdown: 
-    wrap: 72
+output: html_document
+#   beamer_presentation:
+#     number_sections: true
+#     toc: true
+# header-includes:
+#   - \usepackage{amsmath}
+#   - \usepackage{amsfonts}
+#   - \usepackage{amssymb}
+#   - \setbeamertemplate{footline}{\hfill\raisebox{2pt}[0pt][0pt]\scriptsize{Économétrie des         Séries Temporelles - Chapitre 2}\hspace*{10pt} {\insertframenumber{} /                     \inserttotalframenumber}\hspace*{2pt}
+#     }
+# fontsize: 8pt
+# editor_options: 
+#   markdown: 
+#     wrap: 72
 ---
 
 <!-- --- -->

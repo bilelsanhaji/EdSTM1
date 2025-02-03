@@ -202,7 +202,7 @@ yt <- numeric(nobs)
 yt[1] <- y0 
 # Simuler le processus
 for (t in 2:nobs) {
-  yt[t] <- yt[t-1] + mu + rnorm(1, 0, 2) # sd=2 pour accentuer l'illustration
+  yt[t] = yt[t-1] + mu + rnorm(1, 0, 2) # sd=2 pour accentuer l'illustration
 }
 # Graph de la série temporelle
 par(mfrow=c(2,1))
@@ -385,7 +385,7 @@ $\mathsf{V}\left(\widehat{\beta} | x_{1}, \cdots, x_{T}\right) = \sigma^{2} \lef
 
 ------------------------------------------------------------------------
 
-### Résultats asymptotiques
+### Résultats asymptotiques - convergence
 
 \begin{equation}
 \widehat{\beta} - \beta = \frac{\frac{1}{T} \sum_{t=1}^{T} x_{t} u_{t}}{\frac{1}{T} \sum_{t=1}^{T} x_{t}^{2}}
@@ -402,7 +402,7 @@ Donc : \begin{equation}
 
 ------------------------------------------------------------------------
 
-### Résultats asymptotiques (suite)
+### Résultats asymptotiques - normalité
 
 \begin{equation}
 \sqrt{T} \left(\widehat{\beta} - \beta\right) = \sqrt{T} \frac{\frac{1}{T} \sum_{t=1}^{T} x_{t} u_{t}}{\frac{1}{T} \sum_{t=1}^{T} x_{t}^{2}}
@@ -457,8 +457,8 @@ $\mathsf{E}(\widehat{\beta}_{1}) = 0$.
 
 Pour des régresseurs non stationnaires, cela ne tient pas.
 
-Les statistiques t conventionnelles sur $\widehat{\beta}_{0}$ et
-$\widehat{\beta}_{1}$ n'ont pas de distributions t.
+Les statistiques $t$ conventionnelles sur $\widehat{\beta}_{0}$ et
+$\widehat{\beta}_{1}$ n'ont pas de distributions $t$.
 
 Elles divergent en distribution à mesure que $T$ augmente. Par
 conséquent, pour $H_{0} : \beta_{1} = 0$, nous rejetterions plus
@@ -734,8 +734,8 @@ tsplot(xDate[-1][-1],diff(diff(x)),main=
 :::
 
 ```{r}
-adf.test(x)
-adf.test(diff(x))
+adf.test(x, alternative = "stationary")
+adf.test(diff(x), alternative = "stationary")
 adf.test(diff(diff(x)))
 ```
 
@@ -755,12 +755,13 @@ adf.test(diff(diff(x)))
 :::
 
 ```{r}
-w0=ur.df(x, type = "none", selectlags = "AIC")
+w0=ur.df(x, type = "drift", selectlags = "AIC")
 summary(w0)@teststat ; summary(w0)@cval
 w1=ur.df(diff(x), type = "none", selectlags = "AIC")
 summary(w1)@teststat ; summary(w1)@cval
 w2=ur.df(diff(diff(x)), type = "none", selectlags = "AIC")
 summary(w2)@teststat ; summary(w2)@cval
+?ur.df
 ```
 
 ------------------------------------------------------------------------
