@@ -2033,12 +2033,6 @@ $$
 
 ---
 
-```{r}
-# à faire
-```
-
----
-
 ## Modèle Vectoriel de Correction d'Erreur
 
 - VECM estimé en utilisant les résidus de la régression de cointégration
