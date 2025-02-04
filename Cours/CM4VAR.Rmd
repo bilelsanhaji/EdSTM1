@@ -2079,7 +2079,7 @@ $$
 
 ---
 
-## Régression Fallacieuse et Équilibre
+## Régression Fallacieuse et Équilibre 
 
 - La prudence est nécessaire lorsqu'on travaille avec des données I(1)
   - I(0) sur I(0) : Le cas habituel. Les arguments asymptotiques standards s'appliquent.
