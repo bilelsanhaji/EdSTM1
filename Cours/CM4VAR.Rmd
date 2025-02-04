@@ -228,10 +228,10 @@ $$\begin{aligned}
 $$
 \begin{array}{lll}
 \textbf{Propriété} & \textbf{AR(1)} & \textbf{VAR(1)} \\
-\text{Équation} & y_t = \phi_0 + \phi_1 y_{t-1} + \varepsilon_t & \mathbf{y}_t = \boldsymbol{\Phi}_0 + \boldsymbol{\Phi}1 \mathbf{y}{t-1} + \boldsymbol{\varepsilon}_t \\
+\text{Équation} & y_t = \phi_0 + \phi_1 y_{t-1} + \varepsilon_t & \mathbf{y}_t = \boldsymbol{\Phi}_0 + \boldsymbol{\Phi}_1 \mathbf{y}_{t-1} + \boldsymbol{\varepsilon}_t \\
 \text{Moyenne} & \frac{\phi_0}{1 - \phi_1} & (\mathbf{I}_k - \boldsymbol{\Phi}_1)^{-1} \boldsymbol{\Phi}_0 \\
 \text{Variance} & \frac{\sigma^2}{1 - \phi_1^2} & (\mathbf{I} - \boldsymbol{\Phi}_1 \otimes \boldsymbol{\Phi}_1)^{-1} \text{vec}(\boldsymbol{\Sigma}) \\
-\text{Autocovariance } s & \gamma_s = \phi_1^s V[y_t] & \boldsymbol{\Gamma}_s = \boldsymbol{\Phi}1^s V[\mathbf{y}t] \\
+\text{Autocovariance } s & \gamma_s = \phi_1^s V[y_t] & \boldsymbol{\Gamma}_s = \boldsymbol{\Phi}_1^s V[\mathbf{y}_t] \\
 \text{Autocovariance } -s & \gamma{-s} = \phi_1^s V[y_t] & \boldsymbol{\Gamma}{-s} = V[\mathbf{y}_t] \boldsymbol{\Phi}_1^{s\prime} \\
 \end{array}
 $$
@@ -342,20 +342,6 @@ unemp_data <- fredr(series_id = "UNRATE",
                     observation_end = end_date, frequency = "q")
 ```
 
-```{r, echo = FALSE, eval = FALSE}
-# chunk à ne pas utiliser !!
-# chunk qui correspond aux données des slides 01/02/2025
-#start_date <- as.Date("1980-01-01")
-#end_date <- as.Date("2019-12-31")
-
-# 1. Télécharger les données FRED
-#gdp_data <- fredr(series_id = "GDPC1", 
-#                  observation_start = start_date, 
-#                  observation_end = end_date, frequency = "q")
-#unemp_data <- fredr(series_id = "UNRATE", 
-#                    observation_start = start_date, 
-#                    observation_end = end_date, frequency = "q")
-```
 
 ---
 
@@ -388,6 +374,9 @@ data_diff <- data %>%
   mutate(d_log_gdp = c(NA, diff(log_gdp)),
          d_unemp = c(NA, diff(unemp))) %>%
   na.omit()
+
+# autre méthode pour transformer les données (à faire). 
+
 ```
 
 ---
@@ -421,8 +410,8 @@ tseries::adf.test(data_diff$d_unemp)
 # (a) Modèle VAR(1) multivarié
 data_diff$d_log_gdp <- data_diff$d_log_gdp*100
 # *100 pour etre en % et coller à l'echelle de la variation du taux de chomage
-var_model <- VAR(data_diff[, c("d_log_gdp", "d_unemp")],
-                 p = 1, type = "const")
+var_model <- vars::VAR(data_diff[, c("d_log_gdp", "d_unemp")],
+                       p = 1, type = "const")
 
 # (b) Modèles AR(1) univariés
 ar_gdp <- arima(data_diff$d_log_gdp, order = c(1, 0, 0))
@@ -445,9 +434,26 @@ coeftest(var_model)
 
 ---
 
+# Graph des résidus
+
 ```{r, fig.height = 4.7, fig.keep = 'all', echo = FALSE}
 par(mfrow=c(2,1))
 plot(var_model)
+```
+
+--- 
+
+# ACF Résidus
+```{r}
+acf(residuals(var_model))
+```
+
+--- 
+
+# PACF Résidus
+
+```{r}
+pacf(residuals(var_model))
 ```
 
 ---
@@ -555,8 +561,12 @@ adf_gdpdef <- tseries::adf.test(GDPDEF$value)
 
 adf_values <- data.frame(
   Série = c("UNRATE", "DFF", "GDPDEF"),
-  `Statistique ADF` = c(adf_unrate$statistic, adf_dff$statistic, adf_gdpdef$statistic),
-  `p-value` = c(adf_unrate$p.value, adf_dff$p.value, adf_gdpdef$p.value)
+  `Statistique ADF` = c(adf_unrate$statistic, 
+                        adf_dff$statistic, 
+                        adf_gdpdef$statistic),
+  `p-value` = c(adf_unrate$p.value, 
+                adf_dff$p.value, 
+                adf_gdpdef$p.value)
 )
 adf_values
 ```
@@ -2033,6 +2043,81 @@ $$
 
 ---
 
+```{r}
+# Télécharger les données
+consommation <- fredr(series_id = "PCE", observation_start = as.Date("1955-01-01"), observation_end = as.Date("2019-12-31"))
+richesse <- fredr(series_id = "TNWBSHNO", observation_start = as.Date("1955-01-01"), observation_end = as.Date("2019-12-31"))
+revenu <- fredr(series_id = "PI", observation_start = as.Date("1955-01-01"), observation_end = as.Date("2019-12-31"))
+
+# Fusionner les données
+donnees <- consommation %>%
+  select(date, valeur_c = value) %>%
+  left_join(richesse %>% select(date, valeur_a = value), by = "date") %>%
+  left_join(revenu %>% select(date, valeur_y = value), by = "date")
+
+# Nettoyer les données
+donnees <- na.omit(donnees)
+donnees <- donnees %>%
+  mutate(
+    log_c = log(valeur_c),
+    log_a = log(valeur_a),
+    log_y = log(valeur_y)
+  )
+```
+
+
+```{r}
+# Test de stationnarité
+adf.test(donnees$log_c)
+adf.test(donnees$log_a)
+adf.test(donnees$log_y)
+
+# Test de cointégration de Johansen
+jo_test <- ca.jo(donnees[, c("log_c", "log_a", "log_y")], type="eigen", K=2, spec="longrun")
+summary(jo_test)
+
+# johansen_test <- ca.jo(donnees[, c("log_c", "log_a", "log_y")], type = "trace", ecdet = "const", K = 2)
+# summary(johansen_test)
+
+# Estimer la relation de cointégration par régression
+coint_reg <- lm(donnees$log_c ~ donnees$log_a + donnees$log_y, data = donnees)
+residuals_coint <- residuals(coint_reg)
+coeftest(coint_reg)
+
+# Estimation du VECM
+vecm <- cajorls(jo_test, r=1)
+summary(vecm$rlm)
+
+# Tests de diagnostic sur les résidus
+vecm_residuals <- residuals(vecm$rlm)
+serial.test(vecm_residuals)
+arch.test(vecm_residuals)
+normality.test(vecm_residuals)
+
+# Visualisation des résultats
+plot(jo_test)
+plot(vecm_residuals)
+```
+
+```{r}
+# Tracer la première série
+plot(donnees$date, donnees$log_c, type = "l", col = "blue", lwd = 2,
+     xlab = "Date", ylab = "Valeur", main = "Évolution des séries économiques")
+
+# Ajouter les autres séries
+lines(donnees$date, donnees$log_a, col = "red", lwd = 2, lty = "dashed")
+lines(donnees$date, donnees$log_y, col = "green", lwd = 2, lty = "dotted")
+
+# Ajouter une légende
+legend("topleft", legend = c("Consommation (c)", "Richesse agrégée (a)", "Revenu du travail (y)"),
+       col = c("blue", "red", "green"), lty = c("solid", "dashed", "dotted"), lwd = 2, bty = "n")
+```
+
+
+
+
+---
+
 ## Modèle Vectoriel de Correction d'Erreur
 
 - VECM estimé en utilisant les résidus de la régression de cointégration
@@ -2079,7 +2164,7 @@ $$
 
 ---
 
-## Régression Fallacieuse et Équilibre 
+## Régression Fallacieuse et Équilibre
 
 - La prudence est nécessaire lorsqu'on travaille avec des données I(1)
   - I(0) sur I(0) : Le cas habituel. Les arguments asymptotiques standards s'appliquent.
