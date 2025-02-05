@@ -69,6 +69,11 @@ Paris_ts = ts(InsoParis$VALEUR)
 (a) donner une représentation graphique et tester statistiquement :
 
 1.  la stationarité
+```{r, fig.keep='last'}
+tsplot(Nice_ts)
+abline(h = mean(Nice_ts), col = "red", lty = 3, lwd = 2)
+```
+
 ```{r}
 tseries::adf.test(Nice_ts)
 ```
@@ -76,13 +81,41 @@ tseries::adf.test(Nice_ts)
 aTSA::adf.test(Nice_ts)
 ```
 2. l'autocorrélation
-3. la normalité
-4. l'hétéroscédasticité
+```{r}
+acf(Nice_ts)
+```
+```{r}
+acf(Paris_ts)
+```
 
+```{r}
+Box.test(Nice_ts, lag = 6, type = "Box-Pierce")
+?Box.test
+```
+```{r}
+Box.test(Paris_ts, lag = 6, type = "Box-Pierce")
+```
+
+
+3. la normalité
+```{r, fig.keep='last'}
+hist(Nice_ts, freq = F, ylim=c(0,0.006))
+lines(density(Nice_ts), col="darkred", lwd = 3)
+lines(density(rnorm(n = length(Nice_ts), mean = mean(Nice_ts), sd = sd(Nice_ts) )), col="darkgreen", lwd = 2)
+```
+
+```{r}
+qqnorm(Nice_ts)
+qqline(Nice_ts, col="darkred", lwd = 2)
+```
+```{r}
+#shapiro.test(Nice_ts)
+jarque.bera.test(Nice_ts)
+```
 
 (b) estimer et interpréter un AR(1) pour chaque série, puis, sur les résidus :
 
-1.  refaire les tests effectués dans la partie (a)
+1.  refaire les tests effectués dans la partie (a) + l'hétéroscédasticité
 2.  interprétez tous les résultats obtenus
 3.  discutez la différence qu'il y a entre les séries
 
