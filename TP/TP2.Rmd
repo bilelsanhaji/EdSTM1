@@ -75,7 +75,9 @@ tseries::adf.test(Nice_ts)
 ```{r}
 aTSA::adf.test(Nice_ts)
 ```
-
+2. l'autocorrélation
+3. la normalité
+4. l'hétéroscédasticité
 
 
 (b) estimer et interpréter un AR(1) pour chaque série, puis, sur les résidus :
