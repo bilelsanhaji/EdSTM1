@@ -69,53 +69,76 @@ Paris_ts = ts(InsoParis$VALEUR)
 (a) donner une représentation graphique et tester statistiquement :
 
 1.  la stationarité
-```{r, fig.keep='last'}
-tsplot(Nice_ts)
-abline(h = mean(Nice_ts), col = "red", lty = 3, lwd = 2)
+
+```{r}
+moyenne_Nice <- mean(Nice_ts) 
+moyenne_Paris <- mean(Paris_ts)
+
+par(mfrow=c(2,1)) 
+#Nice
+tsplot(Nice_ts,
+     main = "Durées d'insolation (Nice)",
+     xlab = "Années",
+     ylab = "Heures et 1/10",
+     col = "darkblue")
+abline(h = moyenne_Nice, col = "blue", lty = 3, lwd = 2)
+#Paris
+tsplot(Paris_ts, 
+       main = "Durées d'insolation (Paris)", 
+       xlab = "Années",
+       ylab = "Heures et 1/10",
+       col = "darkblue")
+abline(h = moyenne_Paris, col = "red", lty = 3, lwd = 2)
+
 ```
 
 ```{r}
 tseries::adf.test(Nice_ts)
-```
-```{r}
 aTSA::adf.test(Nice_ts)
 ```
+
 2. l'autocorrélation
 ```{r}
 acf(Nice_ts)
-```
-```{r}
 acf(Paris_ts)
 ```
-
 ```{r}
-Box.test(Nice_ts, lag = 6, type = "Box-Pierce")
-?Box.test
+Box.test(Nice_ts, lag = 6, type = "Ljung-Box")
+Box.test(Paris_ts, lag = 6, type = "Ljung-Box")
 ```
-```{r}
-Box.test(Paris_ts, lag = 6, type = "Box-Pierce")
-```
-
 
 3. la normalité
-```{r, fig.keep='last'}
+```{r}
 hist(Nice_ts, freq = F, ylim=c(0,0.006))
-lines(density(Nice_ts), col="darkred", lwd = 3)
-lines(density(rnorm(n = length(Nice_ts), mean = mean(Nice_ts), sd = sd(Nice_ts) )), col="darkgreen", lwd = 2)
+lines(density(Nice_ts), col="darkblue")
+lines(density(rnorm(n = length(Nice_ts), mean = mean(Nice_ts), sd = sd(Nice_ts))), col="darkred", lwd = 3)
+```
+```{r}
+hist(Paris_ts, freq = F, ylim=c(0,0.006))
+lines(density(Paris_ts), col="darkgreen")
+lines(density(rnorm(n = length(Paris_ts), mean = mean(Paris_ts), sd = sd(Paris_ts))), col="darkred", lwd = 3)
 ```
 
+
 ```{r}
-qqnorm(Nice_ts)
-qqline(Nice_ts, col="darkred", lwd = 2)
+qqnorm(Nice_ts, col = "darkblue")
+qqline(Nice_ts, col="darkred", lwd = 3)
 ```
+```{r}
+qqnorm(Paris_ts, col = "darkgreen")
+qqline(Paris_ts, col="darkred", lwd = 3)
+```
+
 ```{r}
 #shapiro.test(Nice_ts)
 jarque.bera.test(Nice_ts)
+jarque.bera.test(Paris_ts)
 ```
+
 
 (b) estimer et interpréter un AR(1) pour chaque série, puis, sur les résidus :
 
-1.  refaire les tests effectués dans la partie (a) + l'hétéroscédasticité
+1.  refaire les tests effectués dans la partie (a)
 2.  interprétez tous les résultats obtenus
 3.  discutez la différence qu'il y a entre les séries
 
