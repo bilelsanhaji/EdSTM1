@@ -513,10 +513,15 @@ par(mfrow=c(1,1))
 ## ~ Taylor Rule : Chomage, Fed Funds, Inflation
 
 $y_1$ : **Chomage**, 
+
 $y_2$ : **Fed Funds**
+
 $y_3$ : **Inflation**
+
 Pays : **USA**
+
 Période : **jan. 1957 - déc. 2019**
+
 Fréquence : **trimestrielle**
 
 ```{r, fig.keep='all'}
@@ -527,16 +532,13 @@ end_date <- as.Date("1999-12-31")
 
 UNRATE <- fredr(series_id = "UNRATE", 
                 observation_start = start_date, 
-                observation_end = end_date, 
-                frequency = "q")
+                observation_end = end_date, frequency = "q")
 DFF <- fredr(series_id = "DFF", 
              observation_start = start_date, 
-             observation_end = end_date, 
-             frequency = "q")
+             observation_end = end_date, frequency = "q")
 GDPDEF <- fredr(series_id = "GDPDEF", 
                 observation_start = start_date, 
-                observation_end = end_date, 
-                frequency = "q")
+                observation_end = end_date, frequency = "q")
 ```
 
 ---
