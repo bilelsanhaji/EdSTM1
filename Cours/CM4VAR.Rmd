@@ -512,7 +512,7 @@ par(mfrow=c(1,1))
 # Politique monétaire - VAR
 ## ~ Taylor Rule : Chomage, Fed Funds, Inflation
 
-$y_1$ : **Chomage**, 
+$y_1$ : **Chômage**
 
 $y_2$ : **Fed Funds**
 
@@ -767,7 +767,7 @@ $$
 
 $$
 \begin{aligned}
-\mathsf{E}_{t}\left[y_{t+h}\right] & =\boldsymbol{\Phi}_{0}+\boldsymbol{\Phi}_{1} \boldsymbol{\Phi}_{0}+\ldots+\boldsymbol{\Phi}_{1}^{h-1} \boldsymbol{\Phi}_{0}+\boldsymbol{\Phi}_{1}^{h} \mathbf{y}_{t} \\
+\mathsf{E}_{t}\left[\mathbf{y}_{t+h}\right] & =\boldsymbol{\Phi}_{0}+\boldsymbol{\Phi}_{1} \boldsymbol{\Phi}_{0}+\ldots+\boldsymbol{\Phi}_{1}^{h-1} \boldsymbol{\Phi}_{0}+\boldsymbol{\Phi}_{1}^{h} \mathbf{y}_{t} \\
 & =\sum_{i=0}^{h-1} \boldsymbol{\Phi}_{1}^{i} \boldsymbol{\Phi}_{0}+\boldsymbol{\Phi}_{1}^{h} \mathbf{y}_{t}
 \end{aligned}
 $$
@@ -812,12 +812,14 @@ $$
 - Méthode itérative
 
   - Construire un modèle pour les prévisions à 1 étape
+
 $$
-\mathbf{y}_{t}=\Phi_{0}+\Phi_{1} \mathbf{y}_{t-1}+\varepsilon_{t}
+\mathbf{y}_{t}=\boldsymbol{\Phi}_{0}+\boldsymbol{\Phi}_{1} \mathbf{y}_{t-1}+\boldsymbol{\varepsilon}_{t}
 $$
   - Itérer la prévision jusqu'à la période $h$
+  
 $$
-\hat{\mathbf{y}}_{t+h \mid t}=\sum_{i=0}^{h-1} \Phi_{1}^{i} \Phi_{0}+\Phi_{1}^{h} \mathbf{y}_{t}
+\hat{\mathbf{y}}_{t+h \mid t}=\sum_{i=0}^{h-1} \boldsymbol{\Phi}_{1}^{i} \boldsymbol{\Phi}_{0}+\boldsymbol{\Phi}_{1}^{h} \mathbf{y}_{t}
 $$
   - Utilise efficacement les informations
   - Impose beaucoup de structure au problème
@@ -825,12 +827,14 @@ $$
 - Méthode directe
 
   - Construire un modèle pour les prévisions à $h$ étapes
+  
 $$
-\mathbf{y}_{t}=\Phi_{0}+\Phi_{h} \mathbf{y}_{t-h}+\boldsymbol{\varepsilon}_{t}
+\mathbf{y}_{t}=\boldsymbol{\Phi}_{0}+\boldsymbol{\Phi}_{h} \mathbf{y}_{t-h}+\boldsymbol{\varepsilon}_{t}
 $$
   - Prévision directe en utilisant une méthode pseudo à 1 étape
+  
 $$
-\hat{\mathbf{y}}_{t+h \mid t}=\Phi_{0}+\Phi_{h} \mathbf{y}_{t}
+\hat{\mathbf{y}}_{t+h \mid t}=\boldsymbol{\Phi}_{0}+\boldsymbol{\Phi}_{h} \mathbf{y}_{t}
 $$
   - Robuste à certaines non-linéarités
 
@@ -849,11 +853,13 @@ $$
 - Solutions :
 
   - Utiliser une régression GMZ régulière avec un estimateur de covariance Newey-West
+  
 $$
 y_{t+h}-\hat{y}_{t+h \mid t}=\beta_{1}+\beta_{2} \hat{y}_{t+h \mid t}+\gamma \mathbf{x}_{t}+\eta_{t}
 $$
 $H_{0}: \beta_{1}=\beta_{2}=\gamma=0, H_{1}: \beta_{1} \neq 0 \cup \beta_{2} \neq 0 \cup \gamma_{j} \neq 0 \exists j$
   - Modéliser explicitement le MA($h-1$) et utiliser un estimateur de covariance standard
+  
 $$
 y_{t+h}-\hat{y}_{t+h \mid t}=\beta_{1}+\beta_{2} \hat{y}_{t+h \mid t}+\gamma \mathbf{x}_{t}+\eta_{t}+\sum_{i=1}^{h-1} \theta_{i} \eta_{t-i}
 $$
