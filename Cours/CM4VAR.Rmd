@@ -857,7 +857,8 @@ $$
 $$
 y_{t+h}-\hat{y}_{t+h \mid t}=\beta_{1}+\beta_{2} \hat{y}_{t+h \mid t}+\gamma \mathbf{x}_{t}+\eta_{t}
 $$
-$H_{0}: \beta_{1}=\beta_{2}=\gamma=0, H_{1}: \beta_{1} \neq 0 \cup \beta_{2} \neq 0 \cup \gamma_{j} \neq 0 \exists j$
+  $H_{0}: \beta_{1}=\beta_{2}=\gamma=0, H_{1}: \beta_{1} \neq 0 \cup \beta_{2} \neq 0 \cup \gamma_{j} \neq 0 \quad \exists j$
+
   - Modéliser explicitement le MA($h-1$) et utiliser un estimateur de covariance standard
   
 $$
