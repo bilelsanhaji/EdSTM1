@@ -628,9 +628,10 @@ tsplot(GDPDEF.dd)
 # Estimation VAR(1) -- UNRATE, FF, INF
 
 ```{r}
-PolMon <- VAR(cbind(UNRATE.d, DFF.d, GDPDEF.dd), type = "none")
+PolMon <- VAR(cbind(UNRATE.d, DFF.d, GDPDEF.dd), type = "none", p = 1)
+# PolMon <- VAR(cbind(UNRATE.d, DFF.d, GDPDEF.dd), type = "none", p = 4)
 
-#summary(PolMon)
+# summary(PolMon)
 coef(PolMon)
 ```
 
@@ -654,23 +655,28 @@ $$
 
 # Graph $\mathbf{y}_t, \widehat{\mathbf{y}}_t, \widehat{\boldsymbol{\varepsilon}}_t, ACF \text{ et } PACF \text{ de } \widehat{\boldsymbol{\varepsilon}}_t$
 
-```{r, r, fig.height = 4.7, fig.show = 'asis', echo = FALSE, fig.keep = 'all'}
+Pour obtenir les 3 graphiques aller sur le .rmd
+
+```{r, fig.height = 5.7, fig.show = 'asis', echo = FALSE, fig.keep = 'all'}
 #lancer le plot de l'analyse var dans le rmd
 par(mfrow = c(3, 1))
 plot(PolMon)
 ```
 
+---
 
-```{r, echo = FALSE}
-# # Standardisation des séries
-# UNRATE.d.std <- scale(UNRATE.d)  # Moyenne 0, variance 1
-# DFF.d.std <- scale(DFF.d)        # Moyenne 0, variance 1
-# GDPDEF.dd.std <- scale(GDPDEF.dd)  # Moyenne 0, variance 1
-# 
-# # Modèle VAR avec données standardisées
-# PolMon.std <- VAR(cbind(UNRATE.d.std[-1], DFF.d.std[-1], GDPDEF.dd.std), type = "none")
+# VAR(1) standardisé
+
+```{r, echo = TRUE, eval=TRUE}
+# Standardisation des séries
+UNRATE.d.std <- scale(UNRATE.d)  # Moyenne 0, variance 1
+DFF.d.std <- scale(DFF.d)        # Moyenne 0, variance 1
+GDPDEF.dd.std <- scale(GDPDEF.dd)  # Moyenne 0, variance 1
+
+# Modèle VAR avec données standardisées
+PolMon.std <- VAR(cbind(UNRATE.d.std[-1], DFF.d.std[-1], GDPDEF.dd.std), type = "none")
 # summary(PolMon.std)
-# coef(PolMon.std)
+coef(PolMon.std)
 # plot(PolMon.std)
 ```
 
@@ -810,32 +816,26 @@ $$
 **Deux méthodes**
 
 - Méthode itérative
-
   - Construire un modèle pour les prévisions à 1 étape
-
-$$
-\mathbf{y}_{t}=\boldsymbol{\Phi}_{0}+\boldsymbol{\Phi}_{1} \mathbf{y}_{t-1}+\boldsymbol{\varepsilon}_{t}
-$$
+  $$
+  \mathbf{y}_{t}=\boldsymbol{\Phi}_{0}+\boldsymbol{\Phi}_{1} \mathbf{y}_{t-1}+\boldsymbol{\varepsilon}_{t}
+  $$
   - Itérer la prévision jusqu'à la période $h$
-  
-$$
-\hat{\mathbf{y}}_{t+h \mid t}=\sum_{i=0}^{h-1} \boldsymbol{\Phi}_{1}^{i} \boldsymbol{\Phi}_{0}+\boldsymbol{\Phi}_{1}^{h} \mathbf{y}_{t}
-$$
+  $$
+  \hat{\mathbf{y}}_{t+h \mid t}=\sum_{i=0}^{h-1} \boldsymbol{\Phi}_{1}^{i} \boldsymbol{\Phi}_{0}+\boldsymbol{\Phi}_{1}^{h} \mathbf{y}_{t}
+  $$
   - Utilise efficacement les informations
   - Impose beaucoup de structure au problème
 
 - Méthode directe
-
   - Construire un modèle pour les prévisions à $h$ étapes
-  
-$$
-\mathbf{y}_{t}=\boldsymbol{\Phi}_{0}+\boldsymbol{\Phi}_{h} \mathbf{y}_{t-h}+\boldsymbol{\varepsilon}_{t}
-$$
+  $$
+  \mathbf{y}_{t}=\boldsymbol{\Phi}_{0}+\boldsymbol{\Phi}_{h} \mathbf{y}_{t-h}+\boldsymbol{\varepsilon}_{t}
+  $$
   - Prévision directe en utilisant une méthode pseudo à 1 étape
-  
-$$
-\hat{\mathbf{y}}_{t+h \mid t}=\boldsymbol{\Phi}_{0}+\boldsymbol{\Phi}_{h} \mathbf{y}_{t}
-$$
+  $$
+  \hat{\mathbf{y}}_{t+h \mid t}=\boldsymbol{\Phi}_{0}+\boldsymbol{\Phi}_{h} \mathbf{y}_{t}
+  $$
   - Robuste à certaines non-linéarités
 
 ---
@@ -853,18 +853,16 @@ $$
 - Solutions :
 
   - Utiliser une régression GMZ régulière avec un estimateur de covariance Newey-West
-  
-$$
-y_{t+h}-\hat{y}_{t+h \mid t}=\beta_{1}+\beta_{2} \hat{y}_{t+h \mid t}+\gamma \mathbf{x}_{t}+\eta_{t}
-$$
-  $H_{0}: \beta_{1}=\beta_{2}=\gamma=0, H_{1}: \beta_{1} \neq 0 \cup \beta_{2} \neq 0 \cup \gamma_{j} \neq 0 \quad \exists j$
-
+  $$
+  y_{t+h}-\hat{y}_{t+h \mid t}=\beta_{1}+\beta_{2} \hat{y}_{t+h \mid t}+\gamma \mathbf{x}_{t}+\eta_{t}
+  $$
+  $$H_{0}: \beta_{1}=\beta_{2}=\gamma=0, H_{1}: \beta_{1} \neq 0 \cup \beta_{2} \neq 0 \cup \gamma_{j} \neq 0 \quad \exists j$$
   - Modéliser explicitement le MA($h-1$) et utiliser un estimateur de covariance standard
+  $$
+  y_{t+h}-\hat{y}_{t+h \mid t}=\beta_{1}+\beta_{2} \hat{y}_{t+h \mid t}+\gamma \mathbf{x}_{t}+\eta_{t}+\sum_{i=1}^{h-1} \theta_{i}\eta_{t-i}
+  $$
   
-$$
-y_{t+h}-\hat{y}_{t+h \mid t}=\beta_{1}+\beta_{2} \hat{y}_{t+h \mid t}+\gamma \mathbf{x}_{t}+\eta_{t}+\sum_{i=1}^{h-1} \theta_{i} \eta_{t-i}
-$$
-  Note : Nulle est la même ; n'impose pas de restriction sur $\theta$
+  *Note* : $H_0$ est la même ; n'impose pas de restriction sur $\theta$
 
 ---
 
@@ -898,18 +896,18 @@ $$
  | Horizon | Série | VAR |  | AR |  |
  | :--: | :--: | :--: | :--: | :--: | :--: |
  |  |  | Restreinte | Non restreinte | Restreinte | Non restreinte |
- | 1 | Chômage | 0.522 | 0.520 | 0.507 | 0.507 |
- |  | Taux des fonds fédéraux | 0.887 | 0.903 | 0.923 | 0.933 |
- |  | Inflation | 0.869 | 0.868 | 0.839 | 0.840 |
- | 2 | Chômage | 0.716 | 0.710 | 0.717 | 0.718 |
- |  | Taux des fonds fédéraux | 0.923 | 0.943 | 1.112 | 1.130 |
- |  | Inflation | 1.082 | 1.081 | 1.031 | 1.030 |
- | 4 | Chômage | 0.872 | 0.861 | 0.937 | 0.940 |
- |  | Taux des fonds fédéraux | 0.952 | 0.976 | 1.082 | 1.109 |
- |  | Inflation | 1.000 | 0.999 | 0.998 | 0.998 |
- | 8 | Chômage | 0.820 | 0.806 | 0.973 | 0.979 |
- |  | Taux des fonds fédéraux | 0.974 | 1.007 | 1.062 | 1.110 |
- |  | Inflation | 1.001 | 1.000 | 0.998 | 0.997 |
+ | 1 | Chômage | 0.522 | 0.520 | **0.507** | 0.507 |
+ |  | Taux des fonds fédéraux | **0.887** | 0.903 | 0.923 | 0.933 |
+ |  | Inflation | 0.869 | 0.868 | **0.839** | 0.840 |
+ | 2 | Chômage | 0.716 | **0.710** | 0.717 | 0.718 |
+ |  | Taux des fonds fédéraux | **0.923** | 0.943 | 1.112 | 1.130 |
+ |  | Inflation | 1.082 | 1.081 | 1.031 | **1.030** |
+ | 4 | Chômage | 0.872 | **0.861** | 0.937 | 0.940 |
+ |  | Taux des fonds fédéraux | **0.952** | 0.976 | 1.082 | 1.109 |
+ |  | Inflation | 1.000 | 0.999 | 0.998 | **0.998** |
+ | 8 | Chômage | 0.820 | **0.806** | 0.973 | 0.979 |
+ |  | Taux des fonds fédéraux | **0.974** | 1.007 | 1.062 | 1.110 |
+ |  | Inflation | 1.001 | 1.000 | 0.998 | **0.997** |
 \normalsize
 
 ---
@@ -1046,9 +1044,7 @@ $$
 - Données simulées
 
 ```{r, echo=FALSE}
-simulate_VAR <- function(n = 1000, seed = 123) {
-  set.seed(seed)  # Fixer la graine pour reproductibilité
-  
+simulate_VAR <- function(n = 1000) {
   # Initialiser les vecteurs x et y
   x <- numeric(n + 22)  # Besoin de 22 lags pour démarrer
   y <- numeric(n + 22)
@@ -1059,7 +1055,7 @@ simulate_VAR <- function(n = 1000, seed = 123) {
   A6_22 <- matrix(c(0, 0, 0, 0.01), nrow = 2, byrow = TRUE)  # Lags 6 à 22
   
   # Génération des erreurs aléatoires
-  epsilon_x <- rnorm(n)
+  epsilon_x <- rnorm(n, sd=2)
   epsilon_y <- rnorm(n)
   
   # Simulation
@@ -1083,14 +1079,13 @@ simulate_VAR <- function(n = 1000, seed = 123) {
 }
 
 # Exécuter la simulation
-set.seed(42)
 sim_data <- simulate_VAR()
 
 # Tracer les séries simulées
 plot(sim_data$x, type = "l", col = "blue", main = "Simulation du modèle VAR",
-     ylab = "Valeurs", xlab = "Temps")
+     ylab = "", xlab = "")
 lines(sim_data$y, col = "red")
-legend("topright", legend = c("x", "y"), col = c("blue", "red"), lty = 1)
+legend("topright", legend = c("x", "y"), col = c("blue", "red"), lty = 1, bty = 'n')
 
 ```
 
@@ -1120,26 +1115,26 @@ pacf(sim_data$y, main = "PACF de y_t")
 
 ---
 
-## Sélection de modèle
+# Sélection de modèle
 
-- Étape 1 : Choisir la longueur de décalage maximale
-  - Critères d'information
-  $$
-  \begin{array}{ll}
-  \text { AIC: } & \ln |\boldsymbol{\Sigma}(P)|+k^{2} P \frac{2}{T}\\
-  \text { Hannan-Quinn IC (HQIC): } & \ln |\boldsymbol{\Sigma}(P)|+k^{2} P \frac{\ln \ln T}{T} \\
-  \text { SIC: } & \ln |\boldsymbol{\Sigma}(P)|+k^{2} P \frac{\ln T}{T}
-  \end{array}
-  $$
-    - $\Sigma(P)$ est la covariance des résidus en utilisant $P$ décalages
-    - $|\cdot|$ est le déterminant
-  - Basé sur l'hypothèse de test
-    - Général à Spécifique
-    - Spécifique à Général
-  - Rapport de vraisemblance
-  $$
-  \left(T-P_{2} k^{2}\right)\left(\ln \left|\boldsymbol{\Sigma}\left(P_{1}\right)\right|-\ln \left|\boldsymbol{\Sigma}\left(P_{2}\right)\right|\right) \stackrel{A}{\sim} \chi_{\left(P_{2}-P_{1}\right) k^{2}}^{2}
-  $$
+- Choisir la longueur de décalage maximale
+- Critères d'information
+$$
+\begin{array}{ll}
+\text { AIC: } & \ln |\boldsymbol{\Sigma}(P)|+k^{2} P \frac{2}{T}\\
+\text { Hannan-Quinn IC (HQIC): } & \ln |\boldsymbol{\Sigma}(P)|+k^{2} P \frac{2 \ln \ln T}{T} \\
+\text { BIC: } & \ln |\boldsymbol{\Sigma}(P)|+k^{2} P \frac{\ln T}{T}
+\end{array}
+$$
+  - $\Sigma(P)$ est la covariance des résidus en utilisant $P$ décalages
+  - $|\cdot|$ est le déterminant
+- Rapport de vraisemblance
+$$
+\left(T-P_{2} k^{2}\right)\left(\ln \left|\boldsymbol{\Sigma}\left(P_{1}\right)\right|-\ln \left|\boldsymbol{\Sigma}\left(P_{2}\right)\right|\right) \stackrel{A}{\sim} \chi_{\left(P_{2}-P_{1}\right) k^{2}}^{2}
+$$
+- Basé sur l'hypothèse de test
+  - Général à Spécifique
+  - Spécifique à Général
 
 ---
 
