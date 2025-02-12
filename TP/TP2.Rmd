@@ -56,6 +56,7 @@ InsoParis <- read_delim(urlSHparis,
                         col_types = cols(YYYYMM = col_date(format = "%Y%m")),
                         comment = "#", trim_ws = TRUE)
 ```
+
 ```{r value}
 Nice_ts = ts(InsoNice$VALEUR)
 Paris_ts = ts(InsoParis$VALEUR)
@@ -70,7 +71,7 @@ Paris_ts = ts(InsoParis$VALEUR)
 
 1.  la stationarité
 
-```{r}
+```{r PlotSeries}
 moyenne_Nice <- mean(Nice_ts) 
 moyenne_Paris <- mean(Paris_ts)
 
@@ -92,44 +93,44 @@ abline(h = moyenne_Paris, col = "red", lty = 3, lwd = 2)
 
 ```
 
-```{r}
+```{r ADFtest}
 tseries::adf.test(Nice_ts)
 aTSA::adf.test(Nice_ts)
 ```
 
 2. l'autocorrélation
-```{r}
+```{r ACF}
 acf(Nice_ts)
 acf(Paris_ts)
 ```
-```{r}
+```{r LBtest}
 Box.test(Nice_ts, lag = 6, type = "Ljung-Box")
 Box.test(Paris_ts, lag = 6, type = "Ljung-Box")
 ```
 
 3. la normalité
-```{r}
+```{r NormPlotNice}
 hist(Nice_ts, freq = F, ylim=c(0,0.006))
 lines(density(Nice_ts), col="darkblue")
 lines(density(rnorm(n = length(Nice_ts), mean = mean(Nice_ts), sd = sd(Nice_ts))), col="darkred", lwd = 3)
 ```
-```{r}
+```{r NormPlotParis}
 hist(Paris_ts, freq = F, ylim=c(0,0.006))
 lines(density(Paris_ts), col="darkgreen")
 lines(density(rnorm(n = length(Paris_ts), mean = mean(Paris_ts), sd = sd(Paris_ts))), col="darkred", lwd = 3)
 ```
 
 
-```{r}
+```{r qqplotNice}
 qqnorm(Nice_ts, col = "darkblue")
 qqline(Nice_ts, col="darkred", lwd = 3)
 ```
-```{r}
+```{r qqplotParis}
 qqnorm(Paris_ts, col = "darkgreen")
 qqline(Paris_ts, col="darkred", lwd = 3)
 ```
 
-```{r}
+```{r TestNormalite}
 #shapiro.test(Nice_ts)
 jarque.bera.test(Nice_ts)
 jarque.bera.test(Paris_ts)
@@ -138,9 +139,44 @@ jarque.bera.test(Paris_ts)
 
 (b) estimer et interpréter un AR(1) pour chaque série, puis, sur les résidus :
 
-1.  refaire les tests effectués dans la partie (a)
-2.  interprétez tous les résultats obtenus
-3.  discutez la différence qu'il y a entre les séries
+```{r AR(1)}
+ar1Nice<- arima(Nice_ts, order = c(1,0,0))
+summary(ar1Nice)
+```
+
+
+```{r residPlotNice}
+epsNice <- ar1Nice$residuals
+#epsNice <- residuals(ar1Nice)
+tsplot(epsNice)
+```
+
+1.  tester autocorrelation, normalité et hétéroscédasticité
+```{r espACF}
+acf(epsNice)
+```
+
+```{r epsLBtest}
+Box.test(epsNice, lag = 6, type = "Ljung-Box")
+```
+
+```{r epsNorm}
+hist(epsNice, freq = F, ylim=c(0,0.008))
+lines(density(epsNice), col="darkblue")
+lines(density(rnorm(n = length(epsNice), mean = mean(epsNice), sd = sd(epsNice))), col="darkred", lwd = 3)
+```
+
+```{r epsJB}
+jarque.bera.test(epsNice)
+```
+
+```{r epsHeter}
+aTSA::arch.test(ar1Nice)
+tsplot(epsNice^2)
+```
+
+2.  interprétez tous les résultats obtenus 
+3.  discutez la différence qu'il y a entre les séries 
 
 ### Exercice 2
 
