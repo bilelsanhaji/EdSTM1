@@ -181,17 +181,19 @@ tsplot(epsNice^2)
 ### Exercice 2 
 
 Simulez un processus AR(1) stationnaire avec 50 observations. Puis
-
 ```{r}
-x = arima.sim(list(order = c(1,0,0), ar = 0.314), n = 50)
+x = arima.sim(list(order = c(1,0,0), ar = 0.09), n = 50)
 ```
+
+
 
 (a) "testez" graphiquement et testez statistiquement :
 
 1.  la stationarité
 ```{r}
-tsplot(x, ylab = "AR(1) simu, n=50, ar = 0.314")
-kpss.test(x)
+tsplot(x, ylab = "AR(1) simu, n=50, ar = 0.09")
+#tseries::kpss.test(x)
+aTSA::kpss.test(x)
 ```
 2.  l'autocorrélation
 ```{r}
@@ -210,7 +212,7 @@ jarque.bera.test(x)
 
 (b) estimez la série simulée et discutez les résultats
 ```{r}
-#DGP : ar = 0.314
+#DGP : ar = 0.09
 x_ar<- arima(x, order = c(1,0,0))
 summary(x_ar)
 ```
@@ -218,12 +220,12 @@ summary(x_ar)
 (c) reproduire les étapes (a) et (b) avec 5000 observations
 
 ```{r}
-y = arima.sim(list(order = c(1,0,0), ar = 0.314), n = 5000)
+y = arima.sim(list(order = c(1,0,0), ar = 0.09), n = 5000)
 ```
 
 1.  la stationarité
 ```{r}
-tsplot(y, ylab = "AR(1) simu, n=5000, ar = 0.314")
+tsplot(y, ylab = "AR(1) simu, n=5000, ar = 0.09")
 kpss.test(y)
 ```
 2.  l'autocorrélation
