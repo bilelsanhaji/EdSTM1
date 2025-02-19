@@ -2,52 +2,38 @@
 title: "Processus ARMA stationnaires"
 author: "Chapitre 2"
 date: "Économétrie des séries temporelles"
-output: html_document
-#   beamer_presentation:
-#     number_sections: true
-#     toc: true
-# header-includes:
-#   - \usepackage{amsmath}
-#   - \usepackage{amsfonts}
-#   - \usepackage{amssymb}
-#   - \setbeamertemplate{footline}{\hfill\raisebox{2pt}[0pt][0pt]\scriptsize{Économétrie des         Séries Temporelles - Chapitre 2}\hspace*{10pt} {\insertframenumber{} /                     \inserttotalframenumber}\hspace*{2pt}
-#     }
-# fontsize: 8pt
-# editor_options: 
-#   markdown: 
-#     wrap: 72
+# output: html_document
+output:
+    beamer_presentation:
+    number_sections: true
+    toc: true
+header-includes:
+  - \usepackage{amsmath}
+  - \usepackage{amsfonts}
+  - \usepackage{amssymb}
+  - \setbeamertemplate{footline}{\hfill\raisebox{2pt}[0pt][0pt]\scriptsize{Économétrie des         Séries Temporelles - Chapitre 2}\hspace*{10pt} {\insertframenumber{} /                     \inserttotalframenumber}\hspace*{2pt}
+    }
+fontsize: 8pt
+editor_options:
+  markdown:
+    wrap: 72
 ---
 
 <!-- --- -->
-
 <!-- title: "Processus ARMA stationnaires" -->
-
 <!-- author: "Chapitre 2" -->
-
 <!-- date: "Économétrie des séries temporelles" -->
-
 <!-- output: -->
-
 <!--   xaringan::moon_reader: -->
-
 <!--     css: [default, hygge-duke, hygge, custom_colors.css, custom_footer.css] -->
-
 <!--     lib_dir: libs -->
-
 <!--     nature: -->
-
 <!--       ratio: "14:9" -->
-
 <!--       highlightStyle: github -->
-
 <!--       highlightLines: true -->
-
 <!--       countIncrementalSlides: false -->
-
 <!--       titleSlideClass: ["center", "middle", "my-title"] -->
-
 <!--     mathjax: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" -->
-
 <!-- --- -->
 
 ```{r setup, include=FALSE}
@@ -977,7 +963,20 @@ restrictions.
 ### Dans la pratique : Test de Ramsey - erreur de spécification
 
 ```{r AAPLreset}
-# Devoir #1 - A faire (de préférence sous sa forme TR^2)
+# Étape 1 : Extraire la série ajustée
+y_hat <- fitted(AAPL.estim)
+# Étape 2 : Construire la dataframe
+y1 = ts(lag((AAPL.r)))
+y_hat2 = y_hat^2
+aux_data <- data.frame(y1, y_hat2)
+# Étape 3 : Régression auxiliaire pour le test de Ramsey
+aux_model <- lm(AAPL.r ~ y1 + y_hat2, data = aux_data)
+# Étape 4 : Test de significativité globale (statistique de Ramsey)
+ramsey_stat <- summary(aux_model)$r.squared * nrow(aux_data)  # Statistique du test
+p_value <- 1 - pchisq(ramsey_stat, df = 1)  # Degré de liberté = nb de variables explicatives
+# Résultat : H0 - erreur de spécification
+cat("Statistique de Ramsey :", ramsey_stat, "\n")
+cat("P-valeur :", p_value, "\n")
 
 ```
 

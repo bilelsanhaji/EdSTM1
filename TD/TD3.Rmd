@@ -1,0 +1,29 @@
+---
+title: "Économétrie des Séries Temporelles"
+author: "Fiche TD #3"
+date: "Racines unitaires"
+output: pdf_document
+---
+
+### Exercice 1
+
+  Après avoir identifié les différents processus, montrez qu'ils ne sont pas stationnaires.
+
+  (a) $X_t = X_{t-1} + \varepsilon_t, \quad\quad \varepsilon_t\sim\mathsf{NID}(0,\sigma^2)$
+  (b) $Z_t = \mu + Z_{t-1} + \varepsilon_t, \quad\quad \varepsilon_t\sim\mathsf{NID}(0,\sigma^2)$
+  (c) $W_t = \mu + \beta t + \varepsilon_t, \quad\quad \varepsilon_t\sim\mathsf{NID}(0,\sigma^2)$
+
+### Exercice 2 
+
+Soit 
+
+  (a) 
+  (b) 
+
+### Exercice 3
+
+Pour 
+
+  (a) 
+  (b) 
+

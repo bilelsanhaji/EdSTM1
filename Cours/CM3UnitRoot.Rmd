@@ -764,6 +764,7 @@ summary(w2)@teststat ; summary(w2)@cval
 ?ur.df
 ```
 
+
 ------------------------------------------------------------------------
 
 ## Changement structurel

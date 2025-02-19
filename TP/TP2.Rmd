@@ -178,16 +178,74 @@ tsplot(epsNice^2)
 2.  interprétez tous les résultats obtenus 
 3.  discutez la différence qu'il y a entre les séries 
 
-### Exercice 2
+### Exercice 2 
 
 Simulez un processus AR(1) stationnaire avec 50 observations. Puis
+
+```{r}
+x = arima.sim(list(order = c(1,0,0), ar = 0.314), n = 50)
+```
 
 (a) "testez" graphiquement et testez statistiquement :
 
 1.  la stationarité
+```{r}
+tsplot(x, ylab = "AR(1) simu, n=50, ar = 0.314")
+kpss.test(x)
+```
 2.  l'autocorrélation
-3.  la normalité
-4.  l'hétéroscédasticité
+```{r}
+acf(x)
+pacf(x)
+Box.test(x, lag = 1, type = "Ljung-Box")
+Box.test(x, lag = 6, type = "Ljung-Box")
+```
+3.  la normalité 
+```{r}
+qqnorm(x, col = "darkgreen")
+qqline(x, col="darkred", lwd = 3)
+jarque.bera.test(x)
+```
+
 
 (b) estimez la série simulée et discutez les résultats
+```{r}
+#DGP : ar = 0.314
+x_ar<- arima(x, order = c(1,0,0))
+summary(x_ar)
+```
+
 (c) reproduire les étapes (a) et (b) avec 5000 observations
+
+```{r}
+y = arima.sim(list(order = c(1,0,0), ar = 0.314), n = 5000)
+```
+
+1.  la stationarité
+```{r}
+tsplot(y, ylab = "AR(1) simu, n=5000, ar = 0.314")
+kpss.test(y)
+```
+2.  l'autocorrélation
+```{r}
+acf(y)
+pacf(y)
+Box.test(y, lag = 1, type = "Ljung-Box")
+Box.test(y, lag = 6, type = "Ljung-Box")
+```
+3.  la normalité 
+```{r}
+qqnorm(y, col = "darkgreen")
+qqline(y, col="darkred", lwd = 3)
+jarque.bera.test(y)
+```
+
+
+(b) estimez la série simulée et discutez les résultats
+```{r}
+#DGP : ar = 0.314
+y_ar<- arima(y, order = c(1,0,0))
+summary(y_ar)
+```
+
+

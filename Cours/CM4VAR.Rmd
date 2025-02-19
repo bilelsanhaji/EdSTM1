@@ -15,34 +15,6 @@ header-includes:
 fontsize: 8pt
 ---
 
-<!-- --- -->
-<!-- title: "Racines unitaires" -->
-<!-- author: "Chapitre 3" -->
-<!-- date: "Économétrie des séries temporelles" -->
-<!-- output: -->
-<!--   xaringan::moon_reader: -->
-<!--     css: [default, hygge-duke, hygge, custom_colors.css, custom_footer.css] -->
-<!--     lib_dir: libs -->
-<!--     nature: -->
-<!--       ratio: "14:9" -->
-<!--       highlightStyle: github -->
-<!--       highlightLines: true -->
-<!--       countIncrementalSlides: false -->
-<!--       titleSlideClass: ["center", "middle", "my-title"] -->
-<!--     mathjax: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" -->
-<!-- --- -->
-
-
-<!-- Mise en forme et espacements -->
-<!-- layout:true -->
-<!-- <div class="footer"><span>Économétrie des Séries Temporelles - Chapitre 3</span></div> -->
-
-<!-- comme \vspace{} -->
-<!-- <div style="margin-top: -0.5em;"></div> -->
-<!-- &nbsp;-->
-
-
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   #eval = FALSE,
@@ -73,6 +45,9 @@ library(aTSA)
 library(forecast)
 library(ppcor)
 library(MASS)
+library(tseries)
+# Load necessary libraries
+library(FinTS)  # For ArchTest()
 ```
 
 ---
@@ -1225,26 +1200,22 @@ $$
 
 ## Plus de causalité de Granger
 
-- Dans le modèle de décalage $P$
-
+- Dans le modèle avec $P$ retards
 $$
 \mathbf{y}_{t}=\boldsymbol{\Phi}_{0}+\boldsymbol{\Phi}_{1} \mathbf{y}_{t-1}+\boldsymbol{\Phi}_{2} \mathbf{y}_{t-2}+\ldots+\boldsymbol{\Phi}_{P} \mathbf{y}_{t-P}+\boldsymbol{\varepsilon}_{t}
 $$
 
-l'hypothèse nulle est
-
+- Hypothèse nulle est 
 $$
 H_{0}: \phi_{i j, 1}=\phi_{i j, 2}=\ldots=\phi_{i j, P}=0
 $$
 
 - Alternative est
-
 $$
 H_{0}: \phi_{i j, 1} \neq 0 \text { ou } \phi_{i j, 2} \neq 0 \text { ou } \ldots \text { ou } \phi_{i j, P} \neq 0
 $$
 
 - Test du rapport de vraisemblance
-
 $$
 \left(T-P k^{2}\right)\left(\ln \left|\boldsymbol{\Sigma}_{r}\right|-\ln \left|\boldsymbol{\Sigma}_{u}\right|\right) \stackrel{A}{\sim} \chi_{P}^{2}
 $$
@@ -1253,16 +1224,15 @@ $$
 - $\Sigma_{r}$ est la covariance des erreurs à partir du modèle restreint
 - $T-P k^{2}$ est le nombre d'observations moins le nombre de paramètres libres dans le modèle non restreint
 
-  - Pourquoi $\chi_{P}^{2}$ ?
-
 ---
 
 ## VAR de Politique Monétaire -- Campbell
 
-- Outil standard dans l'analyse de la politique monétaire
-  - Taux de chômage (différencié)
-  - Taux des fonds fédéraux
-  - Taux d'inflation (différencié)
+Outil standard dans l'analyse de la politique monétaire
+
+- Taux de chômage (différencié)
+- Taux des fonds fédéraux
+- Taux d'inflation (différencié)
 
 $$
 \left[\begin{array}{c}
@@ -2047,7 +2017,7 @@ $$
 
 ---
 
-```{r}
+```{r, echo=FALSE}
 # Télécharger les données
 consommation <- fredr(series_id = "PCE", observation_start = as.Date("1955-01-01"), observation_end = as.Date("2019-12-31"))
 richesse <- fredr(series_id = "TNWBSHNO", observation_start = as.Date("1955-01-01"), observation_end = as.Date("2019-12-31"))
@@ -2070,57 +2040,162 @@ donnees <- donnees %>%
 ```
 
 
-```{r}
+```{r, echo=FALSE}
 # Test de stationnarité
-adf.test(donnees$log_c)
-adf.test(donnees$log_a)
-adf.test(donnees$log_y)
 
+tseries::adf.test(donnees$log_c)
+tseries::adf.test(donnees$log_a)
+tseries::adf.test(donnees$log_y)
+```
+
+---
+
+```{r, echo=FALSE}
 # Test de cointégration de Johansen
 jo_test <- ca.jo(donnees[, c("log_c", "log_a", "log_y")], type="eigen", K=2, spec="longrun")
 summary(jo_test)
 
 # johansen_test <- ca.jo(donnees[, c("log_c", "log_a", "log_y")], type = "trace", ecdet = "const", K = 2)
 # summary(johansen_test)
-
-# Estimer la relation de cointégration par régression
-coint_reg <- lm(donnees$log_c ~ donnees$log_a + donnees$log_y, data = donnees)
-residuals_coint <- residuals(coint_reg)
-coeftest(coint_reg)
-
-# Estimation du VECM
-vecm <- cajorls(jo_test, r=1)
-summary(vecm$rlm)
-
-# Tests de diagnostic sur les résidus
-vecm_residuals <- residuals(vecm$rlm)
-serial.test(vecm_residuals)
-arch.test(vecm_residuals)
-normality.test(vecm_residuals)
-
-# Visualisation des résultats
-plot(jo_test)
-plot(vecm_residuals)
 ```
 
-```{r}
-# Tracer la première série
-plot(donnees$date, donnees$log_c, type = "l", col = "blue", lwd = 2,
-     xlab = "Date", ylab = "Valeur", main = "Évolution des séries économiques")
+---
 
-# Ajouter les autres séries
+# VAR $\rightarrow$ VECM
+
+```{r}
+vecm <- cajorls(jo_test, r=1)
+vecm_var <- vec2var(jo_test, r=1)
+vecm_residuals <- residuals(vecm_var)
+```
+
+---
+
+# Tests de diagnostic -- Corrélation sérielle
+```{r}
+# 1. Corrélation sérielle test
+serial_test_result <- serial.test(vecm_var)
+print(serial_test_result)
+```
+
+---
+
+# Tests de diagnostic -- ARCH
+```{r}
+# 2. ARCH test (FinTS::ArchTest)
+arch_test_result <- apply(vecm_residuals, 2, function(x) ArchTest(x, lags = 1))
+print(arch_test_result)
+```
+
+---
+
+# Tests de diagnostic -- Normalité
+```{r}
+# 3. Normalité test
+normality_test_result <- normality.test(vecm_var)
+print(normality_test_result)
+```
+
+---
+
+# Graphiques - séries
+
+```{r, echo=FALSE}
+plot(donnees$date, donnees$log_c, type = "l", col = "blue", lwd = 2,
+     xlab = "Date", ylab = "Valeur", main = "Évolution des séries économiques", ylim = c(5,max(donnees$log_a)))
 lines(donnees$date, donnees$log_a, col = "red", lwd = 2, lty = "dashed")
 lines(donnees$date, donnees$log_y, col = "green", lwd = 2, lty = "dotted")
 
-# Ajouter une légende
 legend("topleft", legend = c("Consommation (c)", "Richesse agrégée (a)", "Revenu du travail (y)"),
        col = c("blue", "red", "green"), lty = c("solid", "dashed", "dotted"), lwd = 2, bty = "n")
 ```
 
+---
 
+# Graphiques - résidus
+
+```{r, echo=FALSE}
+par(mfrow = c(ncol(vecm_residuals), 1))
+for (i in 1:ncol(vecm_residuals)) {
+  plot(vecm_residuals[, i], type = "l", main = paste("Résidus for Variable", i), ylab = "")
+  abline(h = 0, col = "red", lty = 2)  # ligne à zero
+}
+```
+
+---
+
+# Graphiques - ACF, PACF
+
+```{r, echo=FALSE}
+# ACF and PACF plots for each variable
+par(mfrow = c(ncol(vecm_residuals), 2))  # Arrange plots in a grid
+for (i in 1:ncol(vecm_residuals)) {
+  acf(vecm_residuals[, i], main = paste("ACF de la Variable", i))
+  pacf(vecm_residuals[, i], main = paste("PACF de la Variable", i))
+}
+```
+
+---
+
+# Graphiques - Histogramme et densité
+
+```{r, echo=FALSE}
+# Histogram and density plots for residuals
+par(mfrow = c(ncol(vecm_residuals), 2))  # Arrange plots in a grid
+for (i in 1:ncol(vecm_residuals)) {
+  hist(vecm_residuals[, i], breaks = 30, main = paste("Histogram of Residuals for Variable", i), xlab = "Residuals")
+  plot(density(vecm_residuals[, i]), main = paste("Density Plot of Residuals for Variable", i), xlab = "Residuals")
+}
+```
+
+---
+
+# Graphiques - QQplot
+
+```{r, echo=FALSE}
+# QQ plots for residuals
+par(mfrow = c(1, ncol(vecm_residuals)))  # Arrange plots in a row
+for (i in 1:ncol(vecm_residuals)) {
+  qqnorm(vecm_residuals[, i], main = paste("QQ Plot for Variable", i))
+  qqline(vecm_residuals[, i], col = "red")  # Add a reference line
+}
+```
+
+---
+
+# Graphiques - ARCH
+
+```{r, echo=FALSE}
+# Extract p-values from ARCH test results
+arch_pvalues <- sapply(arch_test_result, function(x) x$p.value)
+
+# Bar plot of ARCH test p-values
+barplot(arch_pvalues, main = "ARCH Test P-Values", ylab = "P-Value", names.arg = paste("Variable", 1:ncol(vecm_residuals)))
+abline(h = 0.05, col = "red", lty = 2)  # Add a significance level line
+```
+
+---
+
+# Graphique - global
+
+```{r, echo = FALSE}
+# Plot serial correlation test results
+plot(serial_test_result)
+```
+
+---
+
+# IRF 
+
+```{r, echo=FALSE}
+# Compute and plot impulse response functions
+irf_result <- irf(vecm_var, n.ahead = 10)
+plot(irf_result)
+```
 
 
 ---
+
 
 ## Modèle Vectoriel de Correction d'Erreur
 
