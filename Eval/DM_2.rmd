@@ -1,0 +1,44 @@
+---
+title: "Économétrie des Séries Temporelles"
+author: "Devoir Maison #2"
+date: "Analyse macroéconomique VAR"
+output: pdf_document
+---
+
+***L'utilisation d'une IA est \Large strictement \normalsize proscrite***
+
+***Le Devoir Maison \#2 (DM\#2) est optionnel, la note finale sera calculée ainsi*** : 
+$$
+\begin{aligned}
+\max\{  &0.4\times Projet + 0.6\times Partiel ; \\
+        & 0.4\times Projet + 0.5\times Partiel + 0.05 \times DM\#1 + 0.05 \times DM\#2 ;\\
+        & 0.4\times Projet + 0.55\times Partiel + 0.05 \times DM\#2 \}
+\end{aligned}
+$$
+
+Analyser à l'aide d'un **modèle VAR**, les données macroéconomiques **PIB** et **Chômage** sur 
+une période de **100 trimestres**. Les données sont celles simulées dans le chunk `data`. 
+Commenter chaque étape et chaque résultat : 
+
+1. Grapher les données
+2. Tester la stationnarité et transformer les données si besoin
+3. Estimer un modèle VAR 
+4. Tester la causalité *a la* Granger
+5. Analyser les IRF
+
+```{r library, echo = FALSE}
+# Bibliothèque R à compléter avec les library() utilisées
+
+```
+
+```{r data, echo = FALSE}
+# !! NE RIEN MODIFIER DANS CE CHUNK !!
+set.seed(1212)
+n <- 100
+dates <- seq.Date(from = as.Date("2000-01-01"), by = "quarter", length.out = n)
+PIB <- cumsum(rnorm(n, mean = 0.5, sd = 0.2))
+Chomage <- 7 + arima.sim(model = list(order = c(1, 0, 0), ar = 0.7), n = n, sd = 0.5)
+# data c'est une matrice avec toutes les données utiles regroupées
+data <- data.frame(Date = dates, PIB = PIB, Chomage = Chomage)
+```
+
