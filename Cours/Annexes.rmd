@@ -244,7 +244,6 @@ E[Y_t Y_{t-2}] &= \phi_1 E[Y_{t-1} Y_{t-2}] + \phi_2 E[Y_{t-2} Y_{t-2}] + E[\var
 \end{aligned}
 $$
 
-(4.127)
 
 puis en remplaçant les espérances par leurs contreparties populationnelles, $\gamma_0$, $\gamma_1$, $\gamma_2$ et $\sigma^2$.
 
@@ -255,8 +254,6 @@ $$
 \gamma_2 &= \phi_1 \gamma_1 + \phi_2 \gamma_0
 \end{aligned}
 $$
-
-(4.128)
 
 De plus, il doit être vrai que $\gamma_s = \phi_1 \gamma_{s-1} + \phi_2 \gamma_{s-2}$ pour $s \geq 2$. Pour résoudre ce système d'équations, divisons les équations d'autocovariance par $\gamma_0$, la variance à long terme. En omettant la première équation, le système se réduit à deux équations avec deux inconnues,
 
@@ -533,7 +530,7 @@ Y_t = \theta_1 \varepsilon_{t-1} + \varepsilon_t.
 La dérivation de sa fonction d'autocorrélation est triviale, car aucune substitution rétroactive n'est nécessaire. La variance est donnée par :
 \[
 \begin{aligned}
-\gamma_0 &= \text{Var}[Y_t] = \mathbb{E}[Y_t^2] \quad (4.136) \\
+\gamma_0 &= \text{Var}[Y_t] = \mathbb{E}[Y_t^2]  \\
 &= \mathbb{E}[(\theta_1 \varepsilon_{t-1} + \varepsilon_t)^2] \\
 &= \mathbb{E}[\theta_1^2 \varepsilon_{t-1}^2 + 2 \theta_1 \varepsilon_t \varepsilon_{t-1} + \varepsilon_t^2] \\
 &= \mathbb{E}[\theta_1^2 \varepsilon_{t-1}^2] + \mathbb{E}[2 \theta_1 \varepsilon_t \varepsilon_{t-1}] + \mathbb{E}[\varepsilon_t^2] \\
@@ -545,7 +542,7 @@ La dérivation de sa fonction d'autocorrélation est triviale, car aucune substi
 La première autocovariance est :
 \[
 \begin{aligned}
-\gamma_1 &= \mathbb{E}[Y_t Y_{t-1}] \quad (4.137) \\
+\gamma_1 &= \mathbb{E}[Y_t Y_{t-1}]  \\
 &= \mathbb{E}[(\theta_1 \varepsilon_{t-1} + \varepsilon_t)(\theta_1 \varepsilon_{t-2} + \varepsilon_{t-1})] \\
 &= \mathbb{E}[\theta_1^2 \varepsilon_{t-1} \varepsilon_{t-2} + \theta_1 \varepsilon_{t-1}^2 + \theta_1 \varepsilon_t \varepsilon_{t-2} + \varepsilon_t \varepsilon_{t-1}] \\
 &= \mathbb{E}[\theta_1^2 \varepsilon_{t-1} \varepsilon_{t-2}] + \mathbb{E}[\theta_1 \varepsilon_{t-1}^2] + \mathbb{E}[\theta_1 \varepsilon_t \varepsilon_{t-2}] + \mathbb{E}[\varepsilon_t \varepsilon_{t-1}] \\
@@ -557,7 +554,7 @@ La première autocovariance est :
 La deuxième autocovariance (et les autocovariances d'ordre supérieur) est :
 \[
 \begin{aligned}
-\gamma_2 &= \mathbb{E}[Y_t Y_{t-2}] \quad (4.138) \\
+\gamma_2 &= \mathbb{E}[Y_t Y_{t-2}]  \\
 &= \mathbb{E}[(\theta_1 \varepsilon_{t-1} + \varepsilon_t)(\theta_1 \varepsilon_{t-3} + \varepsilon_{t-2})] \\
 &= \mathbb{E}[\theta_1^2 \varepsilon_{t-1} \varepsilon_{t-3} + \theta_1 \varepsilon_{t-1} \varepsilon_{t-2} + \theta_1 \varepsilon_t \varepsilon_{t-3} + \varepsilon_t \varepsilon_{t-2}] \\
 &= \mathbb{E}[\theta_1^2 \varepsilon_{t-1} \varepsilon_{t-3}] + \mathbb{E}[\theta_1 \varepsilon_{t-1} \varepsilon_{t-2}] + \mathbb{E}[\theta_1 \varepsilon_t \varepsilon_{t-3}] + \mathbb{E}[\varepsilon_t \varepsilon_{t-2}] \\
@@ -638,7 +635,7 @@ L'autocovariance d'ordre 1 est donnée par :
 
 L'autocorrélation d'ordre 1 est :
 \[
-\rho_1 = \frac{\gamma_1}{\gamma_0} = \frac{(\phi_1 + \theta_1)(1 + \phi_1 \theta_1)}{1 + \theta_1^2 + 2 \phi_1 \theta_1}. \quad (4.142)
+\rho_1 = \frac{\gamma_1}{\gamma_0} = \frac{(\phi_1 + \theta_1)(1 + \phi_1 \theta_1)}{1 + \theta_1^2 + 2 \phi_1 \theta_1}.
 \]
 
 Les autocorrélations d'ordre supérieur suivent la récurrence :
