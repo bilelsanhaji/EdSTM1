@@ -1,0 +1,35 @@
+---
+title: "Approche type au partiel"
+author: "(non exhaustive)"
+date: "Économétrie des séries temporelles"
+output: pdf_document
+---
+
+
+**Question de cours**
+
+  - définition littéraire 
+  - définition formelle 
+  
+**Compréhension**
+
+  - modélisation univariée 
+  - modélisation multavariée (notamment $\boldsymbol\pi=\boldsymbol\alpha\boldsymbol\beta^{\prime}$)
+  
+**Interprétation**
+
+  - graphiques
+  - résultats
+    - d'estimation
+    - tests sur résidus
+  
+**Calcul d'autocovariances et autocorrélations**
+  
+**Calcul de racines réelles**
+  
+**Exercices type, tel que vu en**
+  
+  - TD 
+  - sur le github 
+    - KS financial-econometrics-2020-2021-chapter-4.pdf 
+    - KS financial-econometrics-2020-2021-chapter-5.pdf
