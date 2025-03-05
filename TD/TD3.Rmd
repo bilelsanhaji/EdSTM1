@@ -15,6 +15,40 @@ a. $z_t = z_{t-1} - 0.25 z_{t-2} + w_t + 0.5 w_{t-1}$
 b. $z_t = 2 z_{t-1} - z_{t-2} + w_t$
 c. $z_t = 0.5 z_{t-1} + 0.5 z_{t-2} + w_t - 0.5 w_{t-1} + 0.25 w_{t-2}$
 
+```{r}
+nobs <- 100
+z <- numeric(nobs)
+w <- rnorm(nobs)
+z[1] <- w[1]
+z[2] <- w[2] + w[1]
+for(t in 3:nobs){
+  z[t] <- z[t-1] - 0.25*z[t-2] + w[t] + 0.5*w[t-1]
+}
+plot(z, type = "l", main = "a.")
+```
+```{r}
+nobs <- 100
+z <- numeric(nobs)
+w <- rnorm(nobs)
+z[1] <- w[1]
+z[2] <- w[2] + w[1]
+for(t in 3:nobs){
+  z[t] <- 2*z[t-1] - z[t-2] + w[t]
+}
+plot(z, type = "l", main = "b.")
+```
+```{r}
+nobs <- 100
+z <- numeric(nobs)
+w <- rnorm(nobs)
+z[1] <- w[1]
+z[2] <- w[2] + w[1]
+for(t in 3:nobs){
+  z[t] <- 0.5*z[t-1] + 0.5*z[t-2] + w[t] - 0.5*w[t-1] + 0.25*w[t-2]
+}
+plot(z, type = "l", main = "c.")
+```
+
 ### Exercice 2
 
 On souhaite étudier les interactions entre trois variables macroéconomiques : 
