@@ -40,22 +40,46 @@ library(readr)
 ### Exercice 1 : Analyse des prix de l'or (2005)
 
 Récupérez le prix quotidien de l'or (en dollars par once) pour l'année 2005 sur Yahoo Finance (ticker 'GC=F'). Vous commenterez chaque étape et chaque résultat.
-
+  
 **1. Graphique de la série temporelle des prix de l'or**
 
 a. Téléchargez les données quotidiennes de l'or pour l'année 2005.
+```{r data}
+gold <- getSymbols(Symbols = 'GC=F', src = 'yahoo', 
+                  from='2005-01-01', to='2005-12-31', auto.assign = FALSE)
+gold_p = gold$`GC=F.Close`
+gold_p = na.omit(gold_p)
+```
+
 b. Affichez un graphique de la série temporelle des prix de l'or.
+```{r graphSerie}
+plot(gold_p)
+```
+
 c. Interprétez le graphique. Quelles tendances ou patterns observez-vous ?
 
 **2. Graphique des rendements de l'or** 
 
 a. Calculez les rendements de l'or ainsi $R_t=\log\left(\frac{P_t}{P_{t-1}}\right)$ où $P_t$ est le prix de l'or à la date $t$. Pourquoi utilise-t-on cette transformation ?
+```{r rendements}
+gold_r = diff(log(gold_p))*100
+gold_r <- na.omit(gold_r)
+```
+
 b. Affichez un graphique de la série temporelle des rendements.
+```{r graphRendements}
+plot(gold_r)
+```
+
 c. Interprétez ce graphique. Comment se comporte la série transformée par rapport à la série originale ?
 
 **3. ACF des rendements de l'or**
 
 a. Calculez et affichez l'ACF (Autocorrelation Function) échantillonnée pour les rendements de l'or.
+```{r}
+acf(gold_r)
+```
+
 b. Analysez les caractéristiques de l'ACF. Les autocorrélations sont-elles significatives ? Que suggèrent-elles sur la structure de la série ?
 c. Discutez si les résultats de l'ACF sont compatibles avec l'hypothèse d'une marche aléatoire. Quelles propriétés de l'ACF soutiennent ou contredisent cette hypothèse ?
 
