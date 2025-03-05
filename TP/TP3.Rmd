@@ -34,6 +34,7 @@ library(ggplot2)
 library(forecast)
 library(astsa)
 library(readr)
+library(TSA)
 ```
 
 
@@ -63,7 +64,7 @@ c. Interprétez le graphique. Quelles tendances ou patterns observez-vous ?
 a. Calculez les rendements de l'or ainsi $R_t=\log\left(\frac{P_t}{P_{t-1}}\right)$ où $P_t$ est le prix de l'or à la date $t$. Pourquoi utilise-t-on cette transformation ?
 ```{r rendements}
 gold_r = diff(log(gold_p))*100
-gold_r <- na.omit(gold_r)
+gold_r = na.omit(gold_r)
 ```
 
 b. Affichez un graphique de la série temporelle des rendements.
@@ -76,19 +77,48 @@ c. Interprétez ce graphique. Comment se comporte la série transformée par rap
 **3. ACF des rendements de l'or**
 
 a. Calculez et affichez l'ACF (Autocorrelation Function) échantillonnée pour les rendements de l'or.
-```{r}
-acf(gold_r)
-```
-
 b. Analysez les caractéristiques de l'ACF. Les autocorrélations sont-elles significatives ? Que suggèrent-elles sur la structure de la série ?
 c. Discutez si les résultats de l'ACF sont compatibles avec l'hypothèse d'une marche aléatoire. Quelles propriétés de l'ACF soutiennent ou contredisent cette hypothèse ?
+```{r}
+TSA::acf(gold_r)
+TSA::acf(gold_p) # juste pour illustrer ACF d'un processus non stationnaire
+# Interprétation
+cat("L'ACF montre les corrélations entre les différences des logarithmes des prix à
+    différents décalages. Les valeurs de l'ACF sont proches de zéro pour tous les
+    décalages.")
+```
 
 **4. Histogramme des rendements de l'or**
 
 a. Affichez un histogramme des rendements de l'or.
 b. Interprétez l'histogramme. Quelle est la distribution des rendements ? Est-elle symétrique ? Y a-t-il des valeurs aberrantes ?
+```{r}
+# Affichage de l'histogramme
+ggplot(data = data.frame(gold_r), aes(x = gold_r)) +
+  geom_histogram(binwidth = 0.25, fill = "blue", color = "black") +
+  ggtitle("Histogramme des différences des logarithmes des prix de l'or") +
+  xlab("Différence des logarithmes") +
+  ylab("Fréquence")
+
+# Interprétation
+cat("L'histogramme montre la distribution des différences des logarithmes des prix de
+    l'or. On peut observer que la distribution semble asymétrique à droite et ne semblant
+    pas présenter des queues épaisses. Quid de la normalité ?")
+```
 
 **5. QQ-plot des rendements de l'or**
 
 a. Affichez un graphique quantile-quantile (QQ-plot) des rendements de l'or par rapport à une distribution normale.
 b. Interprétez le QQ-plot. Les rendements suivent-elles une distribution normale ? Quels écarts par rapport à la normalité observez-vous ?
+```{r}
+# Affichage du QQ-plot
+qqnorm(gold_r, main = "QQ-plot des différences des logarithmes des prix de l'or",
+       ylim = c(-3,3))
+qqline(gold_r, col = "red")
+# Interprétation
+cat("Le QQ-plot compare la distribution des différences des logarithmes des prix à une
+    distribution normale. Si les points suivent approximativement la ligne rouge, cela
+    suggère que les données suivent une distribution normale. Des écarts importants
+    indiquent des déviations par rapport à la normalité. Il est difficile par observation
+    de conclure à la normalite ; un test devrait permettre de conclure")
+```
