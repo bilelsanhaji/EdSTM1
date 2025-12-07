@@ -131,14 +131,11 @@ Résoudre des modèles stochastiques et faire des prévisions.
 
 40% (TD) : Projet individuel 
 
-- Le choix du langage informatique est contraint à R.
-
-- Il n'est pas nécessaire d'écrire tous les programmes vous-même à partir 
-de zéro, mais je demande que vous compreniez le programme que vous utilisez 
-et que vous le documentiez correctement avec toutes les citations 
+- Le choix du langage informatique est contraint à R : 
+  Comprendre le programme que vous utilisez et le documenter correctement avec toutes les citations 
 nécessaires des sources originales.
 
-60% (CM) : Examen final sur table (50%) + Exercices à faire à la maison (10%)
+60% (CM) : Examen final sur table
 
 ---
 
@@ -158,7 +155,7 @@ Flux d'une rivière (id 2001) : $m^3/s$, moyenne par jour, 01/01/1975 - 30/09/20
 https://nrfa.ceh.ac.uk/data/station/download?stn=2001&dt=gdf
 
 ```{r, echo=F}
-riverflowUK = read.csv("/Users/bsanhaji/My Drive/Projets/P8 Cours/2024-2025/S2/M1 79.5 - Econometrie des Series Temporelles/EdST M1 MBFA/EdSTM1git/Data/riverflowUK.csv")
+riverflowUK = read.csv("/Users/bsanhaji/My Drive/Projets/P8 Cours/2024-2025/S2/M1 79.5 - Econometrie des Series Temporelles/EdST M1 MBFA/EdSTgit/Data/riverflowUK.csv")
 RFUKdate = as.Date(riverflowUK$Date)
 par(mfrow = c(2, 1), mar = c(2, 6, 4, 1))
 plot(RFUKdate,riverflowUK$Data,type = "l", main = "1975 - 2022",  xlab="", ylab = "m3/s")

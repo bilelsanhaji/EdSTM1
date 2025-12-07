@@ -130,6 +130,7 @@ library(quantmod)
 library(tseries)
 library(lmtest)
 library(urca)
+library(aTSA)
 ```
 
 ```{r}
@@ -734,9 +735,9 @@ tsplot(xDate[-1][-1],diff(diff(x)),main=
 :::
 
 ```{r}
-adf.test(x, alternative = "stationary")
-adf.test(diff(x), alternative = "stationary")
-adf.test(diff(diff(x)))
+tseries::adf.test(x, alternative = "stationary")
+tseries::adf.test(diff(x), alternative = "stationary")
+tseries::adf.test(diff(diff(x)))
 ```
 
 ------------------------------------------------------------------------
