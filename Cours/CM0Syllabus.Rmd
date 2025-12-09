@@ -104,13 +104,9 @@ Puis nous étendons l'analyse aux processus non stationnaires et aux processus m
    
 3. Racines unitaires et non-stationnarité
 
-4. Analyse VAR
-   
-5. Cointégration
+4. Analyse VAR et cointégration
 
-6. VAR structurels et fonctions de réponse impulsionnelle
-
-7.  Modèles de volatilité
+5. Introduction aux modèles non-linéaires
 
 ---
 
@@ -140,13 +136,13 @@ nécessaires des sources originales.
 
 ---
 
-# Moodle
+# moodle et github
 
 La page du cours est régulièrement actualisée. 
 
 Il faut donc s'y rendre régulièrement.
 
-Toutes les communications passent par là !
+Toutes les communications passent par là !!
 
 ---
 
