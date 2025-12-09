@@ -41,76 +41,6 @@ Paris : <https://github.com/bilelsanhaji/EdSTM1/blob/main/Data/SH_MIN175114001.c
 
 Donnez une représentation graphique des données d'insolation de Nice et Paris. Incluez graphiquement les moyennes respectives à l'aide de la fonction `abline()`.
 
-Tout d'abord, un chunk pour le chargement des données :
-
-```{r importation_InsoNice_InsoParis, echo=TRUE}
-InsoNice <- read_delim("~/My Drive/Projets/P8 Cours/2024-2025/S2/M1 79.5 - Econometrie des Series Temporelles/EdST M1 MBFA/EdSTgit/Data/SH_MIN006088001.csv", # "chemin d'acces aux donnees"
-    delim = ";", escape_double = FALSE, col_types = cols(YYYYMM = col_date(format = "%Y%m")), 
-    comment = "#", trim_ws = TRUE)
-
-InsoParis <- read_delim("~/My Drive/Projets/P8 Cours/2024-2025/S2/M1 79.5 - Econometrie des Series Temporelles/EdST M1 MBFA/EdSTgit/Data/SH_MIN175114001.csv", # "chemin d'acces aux donnees"
-    delim = ";", escape_double = FALSE, col_types = cols(YYYYMM = col_date(format = "%Y%m")), 
-    comment = "#", trim_ws = TRUE)
-```
-
-***via*** **github :**
-
-sur la page github où se trouve les données, cliquer sur l'icône "Raw", puis copier/coller le lien.
-
-```{r}
-#URL : https://raw.githubusercontent.com/bilelsanhaji/EdSTM1/refs/heads/main/Data/SH_MIN006088001.csv
-urlSHnice <- "https://raw.githubusercontent.com/bilelsanhaji/EdSTM1/refs/heads/main/Data/SH_MIN006088001.csv"
-InsoNice <- read_delim(urlSHnice, 
-                       delim = ";",
-                       escape_double = FALSE,
-                       col_types = cols(YYYYMM = col_date(format = "%Y%m")), 
-                       comment = "#", trim_ws = TRUE)
-
-urlSHparis <- "https://raw.githubusercontent.com/bilelsanhaji/EdSTM1/refs/heads/main/Data/SH_MIN175114001.csv"
-#ou, afin que le lien apparaisse sur le pdf :
-urlSHparis <- paste0(
-  "https://raw.githubusercontent.com/", 
-  "bilelsanhaji/EdSTM1/main/Data/",
-  "SH_MIN175114001.csv"
-)
-
-InsoParis <- read_delim(urlSHparis,
-                        delim = ";",
-                        escape_double = FALSE,
-                        col_types = cols(YYYYMM = col_date(format = "%Y%m")),
-                        comment = "#", trim_ws = TRUE)
-```
-
-```{r graphique_inso, fig.keep='last'}
-Nice = InsoNice$VALEUR
-Nice_zoo <- zoo(InsoNice$VALEUR, order.by = InsoNice$YYYYMM)
-# ou 
-NiceDate = InsoNice$YYYYMM
-
-Paris = InsoParis$VALEUR
-Paris_zoo <- zoo(InsoParis$VALEUR, order.by = InsoParis$YYYYMM)
-# ou 
-ParisDate = InsoParis$YYYYMM
-
-moyenne_Nice <- mean(Nice_zoo) 
-moyenne_Paris <- mean(Paris_zoo)
-
-par(mfrow=c(2,1)) 
-#Nice
-tsplot(Nice_zoo,
-     main = "Durées d'insolation (Nice)",
-     xlab = "Années",
-     ylab = "Heures et 1/10",
-     col = "darkblue")
-abline(h = moyenne_Nice, col = "blue", lty = 3, lwd = 2)
-#Paris
-tsplot(Paris_zoo, 
-       main = "Durées d'insolation (Paris)", 
-       xlab = "Années",
-       ylab = "Heures et 1/10",
-       col = "darkblue")
-abline(h = moyenne_Paris, col = "red", lty = 3, lwd = 2)
-```
 
 <br>
 
@@ -126,15 +56,3 @@ Simulez un processus complètement aléatoire de 51 observations avec des valeur
 (d) $t_5$
 
 Tracez le graphique de la série temporelle. Cela semble-t-il « aléatoire » ? Répétez cet exercice plusieurs fois avec une nouvelle simulation à chaque fois.
-
-```{r, fig.keep='all'}
-nobs <- 51
-par(mfrow=c(2,2)) 
-tsplot(runif(nobs), main="White Noise") 
-tsplot(rnorm(nobs), main = "Normale") 
-tsplot(rchisq(nobs, 2), main = "Chi-deux") 
-tsplot(rt(nobs, 5), main = "Student") 
-#plot(rnorm(51), type='l') 
-#plot(as.ts(rnorm(51)))
- 
-```
