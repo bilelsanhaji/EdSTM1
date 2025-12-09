@@ -130,7 +130,7 @@ Résoudre des modèles stochastiques et faire des prévisions.
 
 # Évaluation
 
-40% (TD) : Projet individuel 
+40% (TD) : Projet individuel
 
 - Le choix du langage informatique est contraint à R : 
   Comprendre le programme que vous utilisez et le documenter correctement avec toutes les citations 
