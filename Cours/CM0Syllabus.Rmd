@@ -98,19 +98,17 @@ Puis nous étendons l'analyse aux processus non stationnaires et aux processus m
 
 # Plan de cours 
 
-1. Concepts de base des séries temporelles
-   
-2. Processus ARMA stationnaires
-   
-3. Racines unitaires et non-stationnarité
+Chapitre 0 : Présentation Générale
 
-4. Analyse VAR
-   
-5. Cointégration
+Chapitre 1 : Introduction et Révision des Concepts Essentiels des Séries Temporelles 
 
-6. VAR structurels et fonctions de réponse impulsionnelle
+Chapitre 2 : Processus ARMA stationnaires
 
-7.  Modèles de volatilité
+Chapitre 3 : Racines Unitaires
+
+Chapitre 4 : Séries Temporelles Multivariées
+
+Chapitre 5 : Introduction aux Modèles Univariés Non-Linéaires
 
 ---
 
@@ -167,5 +165,5 @@ riverflowUK <- read_delim(riverflowUKdata,
 RFUKdate = as.Date(riverflowUK$Date)
 par(mfrow = c(2, 1), mar = c(2, 6, 4, 1))
 plot(RFUKdate,riverflowUK$Data,type = "l", main = "1975 - 2022",  xlab="", ylab = "m3/s")
-plot(RFUKdate[484:848],riverflowUK$Data[484:848],type = "l", main = "1 année", ylab = "m3/s")
+plot(RFUKdate[84:148],riverflowUK$Data[84:148],type = "l", main = "1 année", ylab = "m3/s")
 ```
