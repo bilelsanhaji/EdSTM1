@@ -111,7 +111,7 @@ library(quantmod)
 ```{r Unrate, fig.width = 10, fig.height = 3.5}
 USunrate = fredr(series_id = "UNRATE",
            observation_start = as.Date("1948-01-01"),
-           observation_end = as.Date("2024-10-01"))
+           observation_end = as.Date("2025-10-01"))
 tsplot(USunrate$date, USunrate$value, 
        ylab="Taux de chomage aux USA", xlab='')
 abline(h = mean(USunrate$value), col = "red", lty = 2, lwd = 2)
@@ -133,7 +133,7 @@ tail(USunrate)
 ```{r IRT10, fig.width = 10, fig.height = 4.0}
 IRT10 = fredr(series_id = "GS10",
            observation_start = as.Date("2000-01-01"),
-           observation_end = as.Date("2024-10-01"),
+           observation_end = as.Date("2025-10-01"),
            frequency = "m")
 tsplot(IRT10$date, IRT10$value, 
        ylab="Taux de rendement", xlab='')
