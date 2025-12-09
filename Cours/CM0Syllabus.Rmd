@@ -140,7 +140,7 @@ nécessaires des sources originales.
 
 ---
 
-# Moodle
+# moodle et github
 
 La page du cours est régulièrement actualisée. 
 
