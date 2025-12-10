@@ -39,8 +39,7 @@ Paris : <https://github.com/bilelsanhaji/EdSTM1/blob/main/Data/SH_MIN175114001.c
 
 ### Exercice 1
 
-Donnez une représentation graphique des données d'insolation de Nice et Paris. Incluez graphiquement les moyennes respectives à l'aide de la fonction `abline()`.
-
+Donnez une représentation graphique des données d'insolation de Nice et Paris. Graphez les moyennes respectives à l'aide de la fonction `abline()`.
 
 <br>
 
