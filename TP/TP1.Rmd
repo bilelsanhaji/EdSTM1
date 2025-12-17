@@ -2,8 +2,12 @@
 title: "Économétrie des Séries Temporelles"
 author: "Fiche TD `R` #1"
 date: "Analyse de Séries Temporelles et Propriétés Stochastiques"
-output: pdf_document
+#output: pdf_document
+output: html_document
 ---
+
+**Il faut deux packages necessaires à installer pour compiler le Rmd avec la fonction install.packages("rmarkdown") et install.packages("knitr") : rmarkdown et knitr**
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
@@ -40,6 +44,34 @@ Paris : <https://github.com/bilelsanhaji/EdSTM1/blob/main/Data/SH_MIN175114001.c
 ### Exercice 1
 
 Donnez une représentation graphique des données d'insolation de Nice et Paris. Graphez les moyennes respectives à l'aide de la fonction `abline()`.
+
+faire apparaitre un chunk :
+- command + alt + i (macos)
+- control + alt + i (windows)
+
+```{r import_data}
+# il faut commenter/supprimer ce chunk pour que la compilation se fasse car le fichier est importer via chemin d'acces sur ordinateur
+# le chunk suivant est suffisant et autonome car récupère les données sur le github
+SH_MIN006088001 <- read_delim("/Users/BS/My Drive/Projets/P8 Cours/2025-2026/S2/M1 79.5 - Econometrie des Series Temporelles/EdST M1 MBFA/EdSTgit/TP/SH_MIN006088001.csv", 
+                              delim = ";", 
+                              escape_double = FALSE, 
+                              col_types = cols(YYYYMM = col_date(format = "%Y%m")), 
+                              comment = "#", trim_ws = TRUE)
+```
+
+```{r import_data_via_github}
+urlSHnice = "https://raw.githubusercontent.com/bilelsanhaji/EdSTM1/refs/heads/main/Data/SH_MIN006088001.csv"
+
+SH_MIN006088001 <- read_delim(urlSHnice, #variable data raw du github
+                              delim = ";", # separateur est ";"
+                              escape_double = FALSE, 
+                              col_types = cols(YYYYMM = col_date(format = "%Y%m")), 
+                              comment = "#", trim_ws = TRUE)
+```
+
+```{r}
+tsplot(SH_MIN006088001$YYYYMM, SH_MIN006088001$VALEUR)
+```
 
 <br>
 
