@@ -2,8 +2,8 @@
 title: "Économétrie des Séries Temporelles"
 author: "Fiche TD `R` #1"
 date: "Analyse de Séries Temporelles et Propriétés Stochastiques"
-#output: pdf_document
-output: html_document
+output: pdf_document
+#output: html_document
 ---
 
 **Il faut deux packages necessaires à installer pour compiler le Rmd avec la fonction install.packages("rmarkdown") et install.packages("knitr") : rmarkdown et knitr**
