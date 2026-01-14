@@ -29,6 +29,7 @@ knitr::opts_chunk$set(
 library(readr)
 library(zoo)
 library(astsa)
+library(stats)
 ```
 
 ### Données
@@ -49,15 +50,15 @@ faire apparaitre un chunk :
 - command + alt + i (macos)
 - control + alt + i (windows)
 
-```{r import_data}
-# il faut commenter/supprimer ce chunk pour que la compilation se fasse car le fichier est importer via chemin d'acces sur ordinateur
-# le chunk suivant est suffisant et autonome car récupère les données sur le github
-SH_MIN006088001 <- read_delim("/Users/BS/My Drive/Projets/P8 Cours/2025-2026/S2/M1 79.5 - Econometrie des Series Temporelles/EdST M1 MBFA/EdSTgit/TP/SH_MIN006088001.csv", 
-                              delim = ";", 
-                              escape_double = FALSE, 
-                              col_types = cols(YYYYMM = col_date(format = "%Y%m")), 
-                              comment = "#", trim_ws = TRUE)
-```
+<!-- ```{r import_data} -->
+<!-- # il faut commenter/supprimer ce chunk pour que la compilation se fasse car le fichier est importer via chemin d'acces sur ordinateur -->
+<!-- # le chunk suivant est suffisant et autonome car récupère les données sur le github -->
+<!-- SH_MIN006088001 <- read_delim("/Users/BS/My Drive/Projets/P8 Cours/2025-2026/S2/M1 79.5 - Econometrie des Series Temporelles/EdST M1 MBFA/EdSTgit/TP/SH_MIN006088001.csv",  -->
+<!--                               delim = ";",  -->
+<!--                               escape_double = FALSE,  -->
+<!--                               col_types = cols(YYYYMM = col_date(format = "%Y%m")),  -->
+<!--                               comment = "#", trim_ws = TRUE) -->
+<!-- ``` -->
 
 ```{r import_data_via_github}
 urlSHnice = "https://raw.githubusercontent.com/bilelsanhaji/EdSTM1/refs/heads/main/Data/SH_MIN006088001.csv"
@@ -70,8 +71,21 @@ SH_MIN006088001 <- read_delim(urlSHnice, #variable data raw du github
 ```
 
 ```{r}
-tsplot(SH_MIN006088001$YYYYMM, SH_MIN006088001$VALEUR)
+tsplot(SH_MIN006088001$YYYYMM,SH_MIN006088001$VALEUR)
 ```
+```{r}
+plot(SH_MIN006088001$YYYYMM, SH_MIN006088001$VALEUR, type = 'l', xlab = "Années", ylab = "Ensoleillement", main = "Ensoleillement à Nice (06)")
+```
+```{r}
+NICEdate = SH_MIN006088001$YYYYMM
+NICEvaleur = SH_MIN006088001$VALEUR
+plot(NICEdate, NICEvaleur, type = 'l', col = "darkblue", xlab = "Années", ylab = "Ensoleillement", main = "Ensoleillement à Nice (06)")
+NICEmean = mean(NICEvaleur)
+abline(h = NICEmean, col="darkred", lty = 2, lwd = 1.5)
+abline()
+```
+
+
 
 <br>
 
@@ -82,8 +96,36 @@ tsplot(SH_MIN006088001$YYYYMM, SH_MIN006088001$VALEUR)
 Simulez un processus complètement aléatoire de 51 observations avec des valeurs indépendantes pour ces "distributions" :
 
 (a) $\mathsf{WN}$
+```{r}
+WNunif = runif(n = 51, min = -2, max = 2)
+tsplot(WNunif)
+```
+```{r}
+WNnorm = rnorm(n = 51, mean = 0, sd = 3)
+tsplot(WNnorm)
+```
+
 (b) $\mathcal{N}(0,1)$
+```{r}
+DGPnorm01 = rnorm(51)
+ts.plot(DGPnorm01)
+#mean(DGPnorm01)
+```
+
+```{r}
+ts.plot(rnorm(51))
+```
 (c) $\chi^2_2$
+```{r}
+tsplot(rchisq(51, 2))
+```
+
+
 (d) $t_5$
+
+```{r}
+tsplot(rt(n = 51,df = 5))
+```
+
 
 Tracez le graphique de la série temporelle. Cela semble-t-il « aléatoire » ? Répétez cet exercice plusieurs fois avec une nouvelle simulation à chaque fois.
