@@ -113,7 +113,7 @@ ts.plot(DGPnorm01)
 ```
 
 ```{r}
-ts.plot(rnorm(51))
+ts.plot(rnorm(501))
 ```
 (c) $\chi^2_2$
 ```{r}
@@ -124,7 +124,7 @@ tsplot(rchisq(51, 2))
 (d) $t_5$
 
 ```{r}
-tsplot(rt(n = 51,df = 5))
+tsplot(rt(n = 501,df = 2))
 ```
 
 

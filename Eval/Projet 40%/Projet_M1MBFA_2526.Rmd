@@ -55,7 +55,7 @@ e. Commenter les résultats et les limites du diagnostic en échantillon fini.
 
 #### Simulation et propriétés d’une série stationnaire
 
-a. Choisir un modèle stationnaire parmi AR(1), MA(1) ou ARMA(1,1), fixer ses paramètres, puis simuler n observations.
+a. Choisir un modèle stationnaire parmi AR(1), MA(1) ou ARMA(1,1), fixer ses paramètres, puis simuler $n$ observations.
 b. Représenter graphiquement la série simulée.
 c. Tracer l’ACF et la PACF de la série et décrire brièvement les propriétés observées.
 d. Vérifier empiriquement la stationnarité de la série.
