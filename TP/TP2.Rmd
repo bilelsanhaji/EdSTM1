@@ -32,6 +32,7 @@ library(forecast)
 library(stats)
 library(tseries)
 library(aTSA)
+library(lmtest)
 #install.packages("aTSA")
 ```
 
@@ -75,7 +76,6 @@ plot(Paris_ts)
 ```
 
 
-
 1. la stationarité
 
 #KPSS
@@ -106,7 +106,6 @@ aTSA::pp.test(Nice_ts)
 ```
 
 
-
 2. l'autocorrélation
 
 #Durbin-Watson
@@ -114,58 +113,53 @@ aTSA::pp.test(Nice_ts)
 #Box-Pierce
 #Ljung-Box
 
+```{r}
+?Box.test
+Box.test(x = Nice_ts, lag = 6, type = "Ljung")
+# x <- rnorm (100)
+# Box.test (x, lag = 1)
+# Box.test (x, lag = 1, type = "Ljung")
+```
+
+```{r}
+acf(Nice_ts)
+tsplot(Nice_ts[1:90])
+```
+
+
 3. la normalité
 
+```{r}
+hist(Nice_ts, freq = F, ylim = c(0,0.0055))
+lines(density(Nice_ts), col="darkred", lwd=2 )
+lines(density(rnorm(1008, mean = mean(Nice_ts), sd = sd(Nice_ts))), col="darkblue", lwd=3 )
+```
+
+```{r}
+qqnorm(Nice_ts)
+qqline(Nice_ts, col=2, lwd=2)
+```
+
 #Jarque-Bera
+```{r}
+jarque.bera.test(Nice_ts)
+jarque.bera.test(rnorm(1000))
+```
+
+#Kolmogorov-Smirnov
 #Shapiro-Wilk
 
 
-
-
-```{r stationarite}
-# dickey-fuller
-# dickey-fuller augmenté (adf)
-#tseries::adf.test()
-tseries::adf.test(Nice_ts)
-#aTSA::adf.test()
-aTSA::adf.test(Nice_ts)
-#ur.df()
-# philips-perron (pp)
-#tseries::pp.test()
-tseries::pp.test(Nice_ts)
-#aTSA::pp.test()
-aTSA::pp.test(Nice_ts)
-#pp.test()
-#####
-#exemple de la R Documentation pp.test {tseries}
-# x = rnorm(1000)  # no unit-root
-# ts.plot(x)
-# tseries::pp.test(x)
-# y = cumsum(x)  # has unit root
-# ts.plot(y)
-# tseries::pp.test(y)
-
-#kpss 
-tseries::kpss.test(Nice_ts)
-aTSA::kpss.test(Nice_ts)
-
-```
-
-2. l'autocorrélation
-```{r autocorrelation}
-# durbin-watson
-# ljung-box
-# box-pierce
-```
-
-3. la normalité
-```{r normalite}
-# jarque-bera
-# shapiro-wilk
-```
-
-
 (b) estimer et interpréter un AR(1) pour chaque série, puis, sur les résidus :
+
+```{r AR1_estimation}
+estim.nice = arima(Nice_ts, order = c(1,0,0))
+summary(estim.nice)
+coeftest(estim.nice)
+checkresiduals(estim.nice)
+
+```
+
 
 1.  tester autocorrelation, normalité et hétéroscédasticité
 2.  interprétez tous les résultats obtenus 
