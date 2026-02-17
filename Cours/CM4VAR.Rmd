@@ -1490,14 +1490,14 @@ Une variable $y_{t}$ est intégrée d'ordre 1, ou $\mathsf{I}(1)$, si $y_{t}$ es
 
 ## Définition (Cointégration Bivariée)
 
-Si $x_{t}$ et $y_{t}$ sont cointégrés si les deux sont I(1) et il existe un vecteur $\beta$ avec les deux éléments non nuls tels que
+$x_{t}$ et $y_{t}$ sont cointégrés si les deux sont I(1), et il existe un vecteur $\beta$ avec les deux éléments non nuls tels que
 
 $$
 \beta_{1} x_{t}-\beta_{2} y_{t} \sim I(0)
 $$
 
 - Lien fort entre $x_{t}$ et $y_{t}$
-- Les deux sont des marches aléatoires mais la différence est à retour moyen
+- Les deux sont des marches aléatoires mais la différence retourne à la moyenne
 - Retour moyen à la tendance (tendance stochastique)
 
 ---
@@ -1537,6 +1537,7 @@ $$
 0.1 & -0.2
 \end{bmatrix}, \quad \lambda_i = -0.43, -0.06
 $$
+
 ---
 
 # Persistance, Anti-persistance et Cointégration
@@ -1558,6 +1559,8 @@ Phi_11 <- matrix(c(0.8, 0.2, 0.2, 0.8), nrow = 2, byrow = TRUE)
 Phi_21 <- matrix(c(0.7, 0.2, 0.2, 0.7), nrow = 2, byrow = TRUE)
 Phi_12 <- matrix(c(1, 0, 0, 1), nrow = 2, byrow = TRUE)
 Phi_22 <- matrix(c(-0.3, 0.3, 0.1, -0.2), nrow = 2, byrow = TRUE)
+
+eigen(Phi_11)$values
 
 # Simulation des séries temporelles
 set.seed(1212)
@@ -1825,8 +1828,6 @@ $$
 \end{array}\right]
 $$
 
-- Combien ?
-
 ---
 
 ## Détermination des vecteurs de cointégration
@@ -1931,7 +1932,7 @@ $$
 $$
 y_{t}=\delta_{0}+\beta x_{t}+\varepsilon_{t}
 $$
-et tester $H_{0}: \gamma=0$ contre $H_{0}: \gamma<0$ dans la régression ADF
+et tester $H_{0}: \gamma=0$ contre $H_{1}: \gamma<0$ dans la régression ADF
 
 $$
 \Delta \hat{\varepsilon}_{t}=\gamma \hat{\varepsilon}_{t-1}+\delta_{1} \Delta \hat{\varepsilon}_{t-1}+\ldots+\delta_{p} \Delta \hat{\varepsilon}_{t-P}+\eta_{t}
