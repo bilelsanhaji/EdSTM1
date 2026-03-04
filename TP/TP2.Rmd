@@ -168,21 +168,69 @@ checkresiduals(estim.nice)
 ### Exercice 2 
 
 Simulez un processus AR(1) stationnaire avec 50 observations. Puis
+```{r}
+#?arima.sim
+ar1 = arima.sim(list(order = c(1,0,0), ar = 0.7), n = 50)
+```
 
 (a) "testez" graphiquement et testez statistiquement :
 
 1.  la stationarité
+```{r}
+#?kpss.test
+kpss.test(ar1)
+```
+
 2.  l'autocorrélation
+```{r}
+Box.test(ar1)
+```
+```{r}
+acf(ar1)
+```
+
 3.  la normalité 
+```{r}
+jarque.bera.test(ar1)
+```
+
 
 (b) estimez la série simulée et discutez les résultats
+```{r}
+ar1.est = arima(ar1, order = c(1,0,0))
+coeftest(ar1.est)
+
+
+```
 
 (c) reproduire les étapes (a) et (b) avec 5000 observations
+```{r}
+#?arima.sim
+ar1_5000 = arima.sim(list(order = c(1,0,0), ar = 0.7), n = 5000)
+```
 
 1.  la stationarité
+```{r}
+kpss.test(ar1_5000)
+```
+
 2.  l'autocorrélation
+```{r}
+Box.test(ar1_5000)
+```
+```{r}
+acf(ar1_5000)
+```
+
 3.  la normalité 
 
 (b) estimez la série simulée et discutez les résultats
+```{r}
+jarque.bera.test(ar1_5000)
+```
+```{r}
+ar1_5000.est = arima(ar1_5000, order = c(1,0,0))
+coeftest(ar1_5000.est)
+```
 
 
